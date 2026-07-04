@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Auto Loan Calculator — Car Payment with Tax &amp; Trade-In | FinCalcs</title>
+<meta name="description" content="Free auto loan calculator: estimate your monthly car payment including down payment, trade-in value and sales tax, plus total loan cost and payoff schedule.">
+<link rel="canonical" href="https://morgagecalc.com/auto-loan-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Auto Loan Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="auto-loan-calculator.html" class="on">Auto Loan</a>
+    <a href="loan-calculator.html">Loan</a>
+    <a href="mortgage-calculator.html">Mortgage</a>
+    <a href="paycheck-calculator.html">Paycheck</a>
+  </nav>
+</header>
+<main>
+<h1>Auto Loan Calculator</h1>
+<p class="sub">Estimate your monthly car payment with vehicle price, down payment, trade-in and sales tax — and see the true total cost of the loan.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Vehicle price ($)</label>
+      <input type="number" id="price" value="35000" min="1000" step="500">
+      <input type="range" id="priceR" min="5000" max="150000" step="500" value="35000">
+    </div>
+    <div class="field"><label>Down payment ($)</label>
+      <input type="number" id="down" value="5000" min="0" step="500">
+      <input type="range" id="downR" min="0" max="50000" step="500" value="5000">
+    </div>
+    <div class="field"><label>Trade-in value ($)</label>
+      <input type="number" id="trade" value="0" min="0" step="500">
+      <input type="range" id="tradeR" min="0" max="50000" step="500" value="0">
+    </div>
+    <div class="field"><label>Sales tax (%)</label>
+      <input type="number" id="tax" value="7" min="0" max="12" step="0.25">
+      <input type="range" id="taxR" min="0" max="12" step="0.25" value="7">
+    </div>
+    <div class="field"><label>Interest rate (APR %)</label>
+      <input type="number" id="rate" value="7.5" min="0" max="25" step="0.1">
+      <input type="range" id="rateR" min="1" max="20" step="0.1" value="7.5">
+    </div>
+    <div class="field"><label>Loan term</label>
+      <select id="months">
+        <option value="36">36 months</option>
+        <option value="48">48 months</option>
+        <option value="60" selected>60 months</option>
+        <option value="72">72 months</option>
+        <option value="84">84 months</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Monthly payment</div><div class="val" id="pay">—</div></div>
+    <div class="row"><span>Sales tax added</span><b id="taxAmt">—</b></div>
+    <div class="row"><span>Amount financed</span><b id="loan">—</b></div>
+    <div class="row"><span>Total interest</span><b id="int">—</b></div>
+    <div class="row"><span>Total loan cost (payments)</span><b id="tot">—</b></div>
+    <div class="row total"><span>Total vehicle cost (all-in)</span><b id="allin">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Cost breakdown"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Vehicle</span>
+      <span><i class="dot" style="background:#94a3b8"></i>Sales tax</span>
+      <span><i class="dot" style="background:#f59e0b"></i>Interest</span>
+    </div>
+    <p class="note">Amount financed = price + sales tax − down payment − trade-in. Sales tax is applied to price minus trade-in (most states).</p>
+  </div>
+</div>
+
+<section class="content">
+  <h2>How your car payment is calculated</h2>
+  <p>The amount financed uses the standard amortization formula <code>M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1)</code>. Most states tax the price after trade-in credit, which this calculator assumes — check your state's rule.</p>
+  <h2>FAQ</h2>
+  <h3>What term should I choose?</h3>
+  <p>Shorter terms (36–48 months) mean higher payments but much less interest and less time underwater on the car's value. 72–84-month loans lower the payment but often cost thousands more.</p>
+  <h3>How much should I put down?</h3>
+  <p>A common rule is 20% down on a new car (10% used) to offset first-year depreciation and avoid owing more than the car is worth.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const price=num('price'), down=num('down'), trade=num('trade'),
+        taxPct=num('tax')/100, r=num('rate')/1200, n=parseInt($('months').value);
+  const taxAmt=Math.max(0,price-trade)*taxPct;
+  const loan=Math.max(0,price+taxAmt-down-trade);
+  const pay=r>0?loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):(n>0?loan/n:0);
+  const tot=pay*n, interest=tot-loan, allin=price+taxAmt+interest;
+  $('pay').textContent=usd2(pay); $('taxAmt').textContent=usd(taxAmt);
+  $('loan').textContent=usd(loan); $('int').textContent=usd(interest);
+  $('tot').textContent=usd(tot); $('allin').textContent=usd(allin);
+  donut($('chart'),[{f:price/allin,c:'#4f46e5'},{f:taxAmt/allin,c:'#94a3b8'},{f:interest/allin,c:'#f59e0b'}]);
+}
+['price','down','trade','tax','rate'].forEach(id=>sync(id,calc));
+$('months').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

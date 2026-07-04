@@ -4,63 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FinCalcs — Free Financial Calculators: Mortgage, SIP, EMI, Tax &amp; More</title>
-<meta name="description" content="Free, fast, private financial calculators. US: mortgage, federal tax, paycheck. India: SIP, EMI, income tax, home loan EMI. All calculations run in your browser.">
+<meta name="description" content="Free, fast, private financial calculators. US: mortgage, tax, paycheck, loans, compound interest. India: SIP, EMI, income tax, FD, mutual funds, GST. All in-browser.">
 <link rel="canonical" href="https://morgagecalc.com/">
 <link rel="stylesheet" href="assets/style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"FinCalcs","url":"https://morgagecalc.com/"}
 </script>
+<style>
+.country-pick{display:flex;align-items:center;gap:8px}
+.country-pick select{padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:.95rem;font-weight:600;background:#fff;color:var(--txt);cursor:pointer}
+</style>
 </head>
 <body>
 <header>
   <a class="brand" href="index.html">Fin<span>Calcs</span></a>
-  <nav><a href="#us">United States</a><a href="#india">India</a></nav>
+  <div class="country-pick">
+    <label for="country" style="font-size:.85rem;color:var(--mut)">Country</label>
+    <select id="country">
+      <option value="in">🇮🇳 India</option>
+      <option value="us">🇺🇸 United States</option>
+    </select>
+  </div>
 </header>
 <main>
 <h1>Free Financial Calculators</h1>
 <p class="sub">Fast, accurate and 100% private — every calculation runs in your browser. Nothing you type ever leaves your device.</p>
 
-<h2 id="us" style="margin-top:12px">🇺🇸 United States</h2>
-<div class="grid-cards">
-  <a class="tool-card" href="mortgage-calculator.html">
-    <span class="flag">US · Home</span>
-    <h3>Mortgage Calculator</h3>
-    <p>Monthly payment with taxes, insurance, PMI &amp; HOA, plus full amortization schedule.</p>
-  </a>
-  <a class="tool-card" href="tax-calculator.html">
-    <span class="flag">US · Tax</span>
-    <h3>Federal Income Tax Calculator</h3>
-    <p>2025 IRS brackets by filing status — tax owed, effective and marginal rates.</p>
-  </a>
-  <a class="tool-card" href="paycheck-calculator.html">
-    <span class="flag">US · Salary</span>
-    <h3>Paycheck Calculator</h3>
-    <p>Take-home pay after federal tax, FICA, state tax and 401(k) — per paycheck.</p>
-  </a>
-</div>
-
-<h2 id="india" style="margin-top:36px">🇮🇳 India</h2>
+<div id="secIN">
+<h2 style="margin-top:12px">🇮🇳 India</h2>
 <div class="grid-cards">
   <a class="tool-card" href="sip-calculator.html">
-    <span class="flag">India · Invest</span>
-    <h3>SIP Calculator</h3>
+    <span class="flag">Invest</span><h3>SIP Calculator</h3>
     <p>Mutual fund SIP maturity value with step-up option and year-by-year growth.</p>
   </a>
   <a class="tool-card" href="emi-calculator.html">
-    <span class="flag">India · Loan</span>
-    <h3>EMI Calculator</h3>
+    <span class="flag">Loan</span><h3>EMI Calculator</h3>
     <p>Personal, car or any loan — EMI, total interest and repayment schedule.</p>
   </a>
   <a class="tool-card" href="income-tax-calculator-india.html">
-    <span class="flag">India · Tax</span>
-    <h3>Income Tax Calculator (FY 2025-26)</h3>
-    <p>New vs old regime comparison with 87A rebate, standard deduction and cess.</p>
+    <span class="flag">Tax</span><h3>Income Tax Calculator</h3>
+    <p>FY 2025-26 &amp; 2026-27 — full new vs old regime comparison with all deductions.</p>
   </a>
   <a class="tool-card" href="home-loan-emi-calculator.html">
-    <span class="flag">India · Home</span>
-    <h3>Home Loan EMI Calculator</h3>
+    <span class="flag">Home</span><h3>Home Loan EMI Calculator</h3>
     <p>Housing loan EMI with prepayment savings — interest saved and tenure cut.</p>
   </a>
+  <a class="tool-card" href="fd-calculator.html">
+    <span class="flag">Deposit</span><h3>FD Calculator</h3>
+    <p>Fixed deposit maturity value and interest with quarterly compounding.</p>
+  </a>
+  <a class="tool-card" href="mutual-fund-calculator.html">
+    <span class="flag">Invest</span><h3>Mutual Fund Returns Calculator</h3>
+    <p>Lumpsum investment growth — future value, gains and yearly projection.</p>
+  </a>
+  <a class="tool-card" href="gst-calculator.html">
+    <span class="flag">Tax</span><h3>GST Calculator</h3>
+    <p>Add or remove GST at 5/12/18/28% with CGST-SGST split.</p>
+  </a>
+</div>
+</div>
+
+<div id="secUS">
+<h2 style="margin-top:36px">🇺🇸 United States</h2>
+<div class="grid-cards">
+  <a class="tool-card" href="mortgage-calculator.html">
+    <span class="flag">Home</span><h3>Mortgage Calculator</h3>
+    <p>Monthly payment with taxes, insurance, PMI &amp; HOA, plus amortization schedule.</p>
+  </a>
+  <a class="tool-card" href="tax-calculator.html">
+    <span class="flag">Tax</span><h3>Federal Income Tax Calculator</h3>
+    <p>2025 IRS brackets by filing status — tax owed, effective and marginal rates.</p>
+  </a>
+  <a class="tool-card" href="paycheck-calculator.html">
+    <span class="flag">Salary</span><h3>Paycheck Calculator</h3>
+    <p>Take-home pay after federal tax, FICA, state tax and 401(k) — per paycheck.</p>
+  </a>
+  <a class="tool-card" href="loan-calculator.html">
+    <span class="flag">Loan</span><h3>Loan Calculator</h3>
+    <p>Monthly payment, total interest and payoff schedule for any fixed-rate loan.</p>
+  </a>
+  <a class="tool-card" href="auto-loan-calculator.html">
+    <span class="flag">Auto</span><h3>Auto Loan Calculator</h3>
+    <p>Car payment with down payment, trade-in and sales tax factored in.</p>
+  </a>
+  <a class="tool-card" href="compound-interest-calculator.html">
+    <span class="flag">Savings</span><h3>Compound Interest Calculator</h3>
+    <p>Growth of savings with monthly contributions and compounding frequency.</p>
+  </a>
+</div>
 </div>
 
 <section class="content">
@@ -69,5 +100,28 @@
 </section>
 </main>
 <footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not financial advice.</footer>
+<script>
+(function(){
+  const sel=document.getElementById('country'), IN=document.getElementById('secIN'), US=document.getElementById('secUS');
+  function detect(){
+    try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+        if(tz==='Asia/Kolkata'||tz==='Asia/Calcutta')return 'in';}catch(e){}
+    const lang=navigator.language||'';
+    return /-IN$/i.test(lang)?'in':'us';
+  }
+  function apply(c){
+    sel.value=c;
+    IN.style.display=c==='in'?'':'none';
+    US.style.display=c==='us'?'':'none';
+  }
+  let saved=null;
+  try{saved=localStorage.getItem('fincalcs_country');}catch(e){}
+  apply(saved==='in'||saved==='us'?saved:detect());
+  sel.addEventListener('change',()=>{
+    apply(sel.value);
+    try{localStorage.setItem('fincalcs_country',sel.value);}catch(e){}
+  });
+})();
+</script>
 </body>
 </html>

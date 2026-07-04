@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compound Interest Calculator — With Monthly Contributions | FinCalcs</title>
+<meta name="description" content="Free compound interest calculator: see how savings grow with an initial deposit, monthly contributions and daily, monthly or annual compounding.">
+<link rel="canonical" href="https://morgagecalc.com/compound-interest-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Compound Interest Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="compound-interest-calculator.html" class="on">Compound Interest</a>
+    <a href="loan-calculator.html">Loan</a>
+    <a href="mortgage-calculator.html">Mortgage</a>
+    <a href="tax-calculator.html">Tax</a>
+  </nav>
+</header>
+<main>
+<h1>Compound Interest Calculator</h1>
+<p class="sub">See how your money grows with compounding — starting balance, monthly contributions, and your choice of compounding frequency.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Initial deposit ($)</label>
+      <input type="number" id="init" value="10000" min="0" step="500">
+      <input type="range" id="initR" min="0" max="500000" step="500" value="10000">
+    </div>
+    <div class="field"><label>Monthly contribution ($)</label>
+      <input type="number" id="contrib" value="500" min="0" step="25">
+      <input type="range" id="contribR" min="0" max="5000" step="25" value="500">
+    </div>
+    <div class="field"><label>Annual interest rate (%)</label>
+      <input type="number" id="rate" value="7" min="0" max="30" step="0.1">
+      <input type="range" id="rateR" min="0.5" max="20" step="0.1" value="7">
+    </div>
+    <div class="field"><label>Time period (years)</label>
+      <input type="number" id="yrs" value="20" min="1" max="50" step="1">
+      <input type="range" id="yrsR" min="1" max="50" step="1" value="20">
+    </div>
+    <div class="field"><label>Compounding frequency</label>
+      <select id="freq">
+        <option value="12" selected>Monthly</option>
+        <option value="365">Daily</option>
+        <option value="4">Quarterly</option>
+        <option value="1">Annually</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Future balance</div><div class="val" id="fv">—</div></div>
+    <div class="row"><span>Initial deposit</span><b id="initO">—</b></div>
+    <div class="row"><span>Total contributions</span><b id="contribO">—</b></div>
+    <div class="row total"><span>Total interest earned</span><b id="int">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Deposits vs interest"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Deposits</span>
+      <span><i class="dot" style="background:#14b8a6"></i>Interest</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Year-by-year growth</h2>
+  <div style="overflow-x:auto"><table class="amort" id="growth"></table></div>
+</div>
+
+<section class="content">
+  <h2>The compound interest formula</h2>
+  <p>For a lump sum: <code>A = P(1 + r/n)^(nt)</code>. Monthly contributions compound from the month they're added. The engine here simulates month by month, so contributions and any compounding frequency combine accurately.</p>
+  <h2>FAQ</h2>
+  <h3>What rate should I use?</h3>
+  <p>High-yield savings currently pay ~4–5%, the S&amp;P 500 has averaged ~10% annually over decades (~7% after inflation). Match the rate to where the money will actually sit.</p>
+  <h3>How powerful is starting early?</h3>
+  <p>At 7%, money doubles roughly every 10 years — $10,000 at age 25 becomes ~$150,000 by 65, but only ~$76,000 if you start at 35. Slide the years and watch.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const P=num('init'), c=num('contrib'), r=num('rate')/100, yrs=num('yrs'), n=parseInt($('freq').value);
+  // simulate monthly, applying periodic compounding as effective monthly rate
+  const iMo=Math.pow(1+r/n,n/12)-1;
+  let bal=P,dep=P,h='<tr><th>Year</th><th>Deposits</th><th>Interest</th><th>Balance</th></tr>';
+  for(let y=1;y<=yrs;y++){
+    for(let m=0;m<12;m++){bal=bal*(1+iMo)+c;dep+=c;}
+    h+='<tr><td>'+y+'</td><td>'+usd(dep)+'</td><td>'+usd(bal-dep)+'</td><td>'+usd(bal)+'</td></tr>';
+  }
+  $('fv').textContent=usd(bal); $('initO').textContent=usd(P);
+  $('contribO').textContent=usd(dep-P); $('int').textContent=usd(bal-dep);
+  donut($('chart'),[{f:dep/bal,c:'#4f46e5'},{f:(bal-dep)/bal,c:'#14b8a6'}]);
+  $('growth').innerHTML=h;
+}
+['init','contrib','rate','yrs'].forEach(id=>sync(id,calc));
+$('freq').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

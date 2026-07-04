@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GST Calculator — Add or Remove GST Online (5%, 12%, 18%, 28%) | FinCalcs</title>
+<meta name="description" content="Free GST calculator for India: add GST to a base price or extract GST from an inclusive price at 5%, 12%, 18% or 28%, with CGST and SGST split.">
+<link rel="canonical" href="https://morgagecalc.com/gst-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"GST Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="gst-calculator.html" class="on">GST</a>
+    <a href="income-tax-calculator-india.html">Income Tax</a>
+    <a href="emi-calculator.html">EMI</a>
+    <a href="sip-calculator.html">SIP</a>
+  </nav>
+</header>
+<main>
+<h1>GST Calculator</h1>
+<p class="sub">Add GST to a base amount, or extract the GST included in a final price — at 5%, 12%, 18% or 28%, with the CGST/SGST split.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="seg">
+      <button id="modeAdd" class="on" type="button">Add GST (exclusive)</button>
+      <button id="modeRem" type="button">Remove GST (inclusive)</button>
+    </div>
+    <div class="field"><label id="amtLbl">Base amount — before GST (₹)</label>
+      <input type="number" id="amt" value="10000" min="0" step="100">
+      <input type="range" id="amtR" min="100" max="1000000" step="100" value="10000">
+    </div>
+    <div class="field"><label>GST rate</label>
+      <select id="rate">
+        <option value="5">5% — essentials, transport</option>
+        <option value="12">12% — processed food, business class air</option>
+        <option value="18" selected>18% — most goods &amp; services</option>
+        <option value="28">28% — luxury, autos</option>
+        <option value="3">3% — gold, precious metals</option>
+        <option value="0.25">0.25% — rough diamonds</option>
+      </select>
+    </div>
+    <div class="field"><label>Custom rate (%) <span style="font-weight:400;color:var(--mut)">optional, overrides above</span></label>
+      <input type="number" id="custom" value="" min="0" max="100" step="0.01" placeholder="e.g. 18">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl" id="resLbl">Total (incl. GST)</div><div class="val" id="total">—</div></div>
+    <div class="row"><span>Base amount (pre-GST)</span><b id="base">—</b></div>
+    <div class="row"><span>Total GST</span><b id="gst">—</b></div>
+    <div class="row"><span>CGST (half)</span><b id="cgst">—</b></div>
+    <div class="row"><span>SGST (half)</span><b id="sgst">—</b></div>
+    <div class="row total"><span>IGST (inter-state, full)</span><b id="igst">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Base vs GST"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Base</span>
+      <span><i class="dot" style="background:#f59e0b"></i>GST</span>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <h2>How GST is calculated</h2>
+  <p>Adding GST: <code>GST = base × rate%</code>, total = base + GST. Removing GST from an inclusive price: <code>base = total ÷ (1 + rate%)</code>. Within a state the tax splits equally into CGST and SGST; across states it's charged as IGST in full.</p>
+  <h2>FAQ</h2>
+  <h3>Which GST rate applies to my product?</h3>
+  <p>Rates depend on the HSN/SAC code of the item. 18% covers most services and goods; essentials are 0–5%; luxury and sin goods are 28% (plus cess on some items like cars and tobacco).</p>
+  <h3>What changed with GST 2.0?</h3>
+  <p>Rate slabs have been rationalized over time — always confirm the current rate for your HSN code on the official GST portal before invoicing.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not tax advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+let mode='add';
+function calc(){
+  const amt=num('amt'), custom=num('custom');
+  const rate=(custom>0?custom:parseFloat($('rate').value))/100;
+  let base,gst,total;
+  if(mode==='add'){base=amt;gst=base*rate;total=base+gst;}
+  else{total=amt;base=total/(1+rate);gst=total-base;}
+  $('total').textContent=mode==='add'?inr(total):inr(base);
+  $('resLbl').textContent=mode==='add'?'Total (incl. GST)':'Base amount (excl. GST)';
+  $('base').textContent='₹'+base.toLocaleString('en-IN',{maximumFractionDigits:2});
+  $('gst').textContent='₹'+gst.toLocaleString('en-IN',{maximumFractionDigits:2});
+  $('cgst').textContent='₹'+(gst/2).toLocaleString('en-IN',{maximumFractionDigits:2});
+  $('sgst').textContent='₹'+(gst/2).toLocaleString('en-IN',{maximumFractionDigits:2});
+  $('igst').textContent='₹'+gst.toLocaleString('en-IN',{maximumFractionDigits:2});
+  donut($('chart'),[{f:base/total,c:'#4f46e5'},{f:gst/total,c:'#f59e0b'}]);
+}
+function setMode(m){mode=m;
+  $('modeAdd').classList.toggle('on',m==='add');
+  $('modeRem').classList.toggle('on',m==='rem');
+  $('amtLbl').textContent=m==='add'?'Base amount — before GST (₹)':'Final price — including GST (₹)';
+  calc();}
+$('modeAdd').addEventListener('click',()=>setMode('add'));
+$('modeRem').addEventListener('click',()=>setMode('rem'));
+['amt','custom'].forEach(id=>sync(id,calc));
+$('rate').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

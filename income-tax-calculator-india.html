@@ -3,19 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Income Tax Calculator India FY 2025-26 — New vs Old Regime | FinCalcs</title>
-<meta name="description" content="Free income tax calculator for India FY 2025-26 (AY 2026-27). Compare new regime vs old regime, with standard deduction, 87A rebate, cess and slab-wise breakup.">
+<title>Income Tax Calculator India FY 2025-26 &amp; FY 2026-27 — New vs Old Regime | FinCalcs</title>
+<meta name="description" content="Detailed income tax calculator for India FY 2025-26 and FY 2026-27. Enter salary, rent, interest and deductions (80C, 80D, HRA, home loan) — compare new vs old regime with rebate, surcharge and cess.">
 <link rel="canonical" href="https://morgagecalc.com/income-tax-calculator-india">
 <link rel="stylesheet" href="assets/style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Income Tax Calculator India","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
 </script>
+<style>
+.cmp{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:4px}
+.cmp th,.cmp td{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:right;font-variant-numeric:tabular-nums}
+.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--mut)}
+.cmp th{background:#f8fafc;color:var(--mut);font-size:.8rem}
+.cmp .win{background:#eef2ff;font-weight:700}
+.cmp tr.tot td{border-top:2px solid var(--p);font-weight:800;font-size:.95rem}
+.sec{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--p);margin:22px 0 10px;padding-top:14px;border-top:1px dashed var(--bd)}
+.sec:first-child{margin-top:0;padding-top:0;border-top:0}
+.hint{font-size:.75rem;color:var(--mut);font-weight:400}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:520px){.two{grid-template-columns:1fr}}
+.badge{display:inline-block;background:#dcfce7;color:#166534;font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:middle}
+</style>
 </head>
 <body>
 <header>
   <a class="brand" href="index.html">Fin<span>Calcs</span></a>
   <nav>
-    <a href="index.html">All Calculators</a>
+    <a href="index.html">🏠 Home</a>
     <a href="sip-calculator.html">SIP</a>
     <a href="emi-calculator.html">EMI</a>
     <a href="income-tax-calculator-india.html" class="on">Income Tax</a>
@@ -23,82 +37,206 @@
   </nav>
 </header>
 <main>
-<h1>Income Tax Calculator — India (FY 2025-26)</h1>
-<p class="sub">Compare your tax under the new and old regimes for FY 2025-26 (AY 2026-27), including standard deduction, Section 87A rebate and 4% health &amp; education cess.</p>
+<h1>Income Tax Calculator — India</h1>
+<p class="sub">Enter all your income sources and tax-saving investments to compare the old and new regimes in full detail — standard deduction, Section 87A rebate, surcharge and 4% cess included.</p>
 
 <div class="calc">
   <div class="card">
-    <div class="field"><label>Annual gross income (₹)</label>
-      <input type="number" id="income" value="1200000" min="0" step="10000">
-      <input type="range" id="incomeR" min="300000" max="10000000" step="50000" value="1200000">
+    <div class="sec">Basic details</div>
+    <div class="two">
+      <div class="field"><label>Financial year</label>
+        <select id="fy">
+          <option value="2526" selected>FY 2025-26 (AY 2026-27)</option>
+          <option value="2627">FY 2026-27 (AY 2027-28)</option>
+        </select>
+      </div>
+      <div class="field"><label>Age group <span class="hint">affects old regime</span></label>
+        <select id="age">
+          <option value="0" selected>Below 60</option>
+          <option value="60">60 – 80 (senior)</option>
+          <option value="80">80 &amp; above (super senior)</option>
+        </select>
+      </div>
     </div>
-    <div class="field"><label>Are you salaried? (standard deduction applies)</label>
-      <select id="salaried"><option value="1" selected>Yes</option><option value="0">No</option></select>
+
+    <div class="sec">Income details (annual, ₹)</div>
+    <div class="field"><label>Gross salary <span class="hint">before exemptions</span></label>
+      <input type="number" id="salary" value="1500000" min="0" step="10000">
+      <input type="range" id="salaryR" min="0" max="10000000" step="50000" value="1500000">
     </div>
-    <div class="field"><label>Old-regime deductions — 80C, 80D, HRA, home loan interest etc. (₹)</label>
-      <input type="number" id="ded" value="150000" min="0" step="5000">
-      <input type="range" id="dedR" min="0" max="600000" step="5000" value="150000">
+    <div class="two">
+      <div class="field"><label>Exempt allowances <span class="hint">HRA, LTA — old regime</span></label>
+        <input type="number" id="exempt" value="0" min="0" step="5000"></div>
+      <div class="field"><label>Interest income <span class="hint">savings, FD</span></label>
+        <input type="number" id="interest" value="0" min="0" step="1000"></div>
+      <div class="field"><label>Rental income received</label>
+        <input type="number" id="rent" value="0" min="0" step="5000"></div>
+      <div class="field"><label>Other income <span class="hint">freelance, etc.</span></label>
+        <input type="number" id="other" value="0" min="0" step="5000"></div>
+      <div class="field"><label>Digital assets income <span class="hint">crypto/VDA — flat 30%</span></label>
+        <input type="number" id="vda" value="0" min="0" step="5000"></div>
+      <div class="field"><label>Home loan interest — self-occupied <span class="hint">24(b), old only</span></label>
+        <input type="number" id="hlSelf" value="0" min="0" step="5000"></div>
+      <div class="field"><label>Home loan interest — let-out</label>
+        <input type="number" id="hlLet" value="0" min="0" step="5000"></div>
     </div>
-    <p class="note">Standard deduction is applied automatically for salaried: ₹75,000 (new regime) / ₹50,000 (old regime). The deductions field applies to the old regime only.</p>
+
+    <div class="sec">Deductions (old regime)</div>
+    <div class="two">
+      <div class="field"><label>80C <span class="hint">PF, ELSS, LIC — max 1.5L</span></label>
+        <input type="number" id="d80c" value="150000" min="0" step="5000"></div>
+      <div class="field"><label>80D <span class="hint">medical insurance</span></label>
+        <input type="number" id="d80d" value="0" min="0" step="1000"></div>
+      <div class="field"><label>80CCD(1B) <span class="hint">NPS — max 50K</span></label>
+        <input type="number" id="dnps" value="0" min="0" step="5000"></div>
+      <div class="field"><label>80TTA/TTB <span class="hint">savings interest</span></label>
+        <input type="number" id="d80tta" value="0" min="0" step="1000"></div>
+      <div class="field"><label>80G <span class="hint">donations</span></label>
+        <input type="number" id="d80g" value="0" min="0" step="1000"></div>
+      <div class="field"><label>80E <span class="hint">education loan interest</span></label>
+        <input type="number" id="d80e" value="0" min="0" step="1000"></div>
+    </div>
+    <div class="field"><label>Employer NPS — 80CCD(2) <span class="hint">allowed in BOTH regimes</span></label>
+      <input type="number" id="dempnps" value="0" min="0" step="5000"></div>
   </div>
 
   <div class="card">
-    <div class="res-big"><div class="lbl" id="bestLbl">Your tax (best regime)</div><div class="val" id="best">—</div></div>
-    <div class="row"><span>New regime tax (incl. cess)</span><b id="newTax">—</b></div>
-    <div class="row"><span>Old regime tax (incl. cess)</span><b id="oldTax">—</b></div>
-    <div class="row total"><span>You save by choosing <b id="winner">—</b></span><b id="save">—</b></div>
-    <div class="row"><span>Effective tax rate (best)</span><b id="eff">—</b></div>
-    <div class="row"><span>Monthly in-hand impact</span><b id="monthly">—</b></div>
+    <div class="res-big"><div class="lbl">Your tax — <span id="winName">—</span><span class="badge" id="saveBadge"></span></div><div class="val" id="best">—</div></div>
+    <table class="cmp" id="cmp"></table>
     <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Tax vs income"></svg>
     <div class="legend">
       <span><i class="dot" style="background:#4f46e5"></i>Post-tax income</span>
-      <span><i class="dot" style="background:#f43f5e"></i>Tax</span>
+      <span><i class="dot" style="background:#f43f5e"></i>Tax (best regime)</span>
     </div>
+    <div class="row total"><span>Monthly in-hand (best regime)</span><b id="monthly">—</b></div>
+    <div class="row"><span>Effective tax rate</span><b id="eff">—</b></div>
+  </div>
+</div>
+
+<div class="calc" style="margin-top:24px">
+  <div class="card">
+    <h2 style="font-size:1.1rem;margin-bottom:4px">Income Tax Slab Rates — New Regime</h2>
+    <p class="hint" style="margin-bottom:8px">FY 2025-26 &amp; FY 2026-27 (default regime)</p>
+    <table class="cmp">
+      <tr><th>Income slab (₹)</th><th>Tax rate</th></tr>
+      <tr><td>Up to 4 lakh</td><td>Nil</td></tr>
+      <tr><td>4 lakh – 8 lakh</td><td>5%</td></tr>
+      <tr><td>8 lakh – 12 lakh</td><td>10%</td></tr>
+      <tr><td>12 lakh – 16 lakh</td><td>15%</td></tr>
+      <tr><td>16 lakh – 20 lakh</td><td>20%</td></tr>
+      <tr><td>20 lakh – 24 lakh</td><td>25%</td></tr>
+      <tr><td>Above 24 lakh</td><td>30%</td></tr>
+    </table>
+    <p class="hint" style="margin-top:8px">87A rebate: zero tax up to ₹12L taxable income (₹12.75L salary with standard deduction).</p>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem;margin-bottom:4px">Income Tax Slab Rates — Old Regime</h2>
+    <p class="hint" style="margin-bottom:8px">Basic exemption: ₹2.5L (&lt;60) · ₹3L (60–80) · ₹5L (80+)</p>
+    <table class="cmp">
+      <tr><th>Income slab (₹)</th><th>Tax rate</th></tr>
+      <tr><td>Up to 2.5 lakh</td><td>Nil</td></tr>
+      <tr><td>2.5 lakh – 5 lakh</td><td>5%</td></tr>
+      <tr><td>5 lakh – 10 lakh</td><td>20%</td></tr>
+      <tr><td>Above 10 lakh</td><td>30%</td></tr>
+    </table>
+    <p class="hint" style="margin-top:8px">87A rebate: zero tax up to ₹5L taxable income. Full Chapter VI-A deductions (80C, 80D, HRA, home loan interest) available. 4% cess applies in both regimes; surcharge above ₹50L.</p>
   </div>
 </div>
 
 <section class="content">
-  <h2>FY 2025-26 slabs used</h2>
-  <h3>New regime (default)</h3>
-  <p>0–4L: nil · 4–8L: 5% · 8–12L: 10% · 12–16L: 15% · 16–20L: 20% · 20–24L: 25% · above 24L: 30%. Section 87A rebate makes tax zero up to ₹12L taxable income (₹12.75L for salaried with standard deduction). 4% cess applies.</p>
+  <h2>How this calculator works</h2>
+  <p>Salary is reduced by exempt allowances (old regime) and the standard deduction — ₹50,000 old, ₹75,000 new. Rental income gets the 30% standard deduction under Section 24(a), and let-out home loan interest is deducted (loss set-off up to ₹2L in the old regime only). Chapter VI-A deductions (80C capped at ₹1.5L, NPS at ₹50K, 80TTA at ₹10K / ₹50K for seniors, self-occupied interest at ₹2L) apply in the old regime; employer NPS under 80CCD(2) applies in both. Digital asset income is taxed at a flat 30% with no rebate.</p>
+  <h2>Slabs used (FY 2025-26 &amp; FY 2026-27)</h2>
+  <h3>New regime</h3>
+  <p>0–4L nil · 4–8L 5% · 8–12L 10% · 12–16L 15% · 16–20L 20% · 20–24L 25% · 24L+ 30%. Section 87A rebate (max ₹60,000) makes normal-rate income up to ₹12L tax-free, with marginal relief just above it.</p>
   <h3>Old regime</h3>
-  <p>0–2.5L: nil · 2.5–5L: 5% · 5–10L: 20% · above 10L: 30%, with 87A rebate up to ₹5L taxable income, ₹50,000 standard deduction, and full Chapter VI-A deductions (80C, 80D, HRA, home loan interest, etc.). 4% cess applies.</p>
+  <p>Basic exemption ₹2.5L (₹3L for 60–80, ₹5L for 80+), then 5% to ₹5L, 20% to ₹10L, 30% above. 87A rebate (max ₹12,500) up to ₹5L taxable income.</p>
+  <h3>Surcharge &amp; cess</h3>
+  <p>Surcharge on tax: 10% above ₹50L, 15% above ₹1Cr, 25% above ₹2Cr, 37% above ₹5Cr (capped at 25% in the new regime), with marginal relief. Health &amp; education cess of 4% applies to everyone.</p>
   <h2>FAQ</h2>
   <h3>Which regime should I pick?</h3>
-  <p>The new regime usually wins unless your total deductions are large (typically ₹4L+ at higher incomes). This calculator shows the exact break-even for your numbers — just move the deductions slider.</p>
-  <h3>Is surcharge included?</h3>
-  <p>Surcharge applies above ₹50L total income (10%–25%). This tool targets typical salaried incomes and excludes surcharge; treat results above ₹50L as indicative.</p>
+  <p>The new regime usually wins unless your combined deductions (80C + 80D + HRA + home loan interest) are large. Fill in your actual numbers above — the greener regime is highlighted automatically.</p>
+  <h3>Is the rebate really zero tax up to ₹12.75L?</h3>
+  <p>For salaried taxpayers in the new regime, yes: ₹12.75L salary − ₹75,000 standard deduction = ₹12L taxable, fully covered by the 87A rebate. Special-rate income like crypto is not eligible.</p>
 </section>
 </main>
 <footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not tax advice. <a href="index.html">All calculators</a></footer>
 <script src="assets/common.js"></script>
 <script>
 const NEW=[[400000,0],[800000,.05],[1200000,.10],[1600000,.15],[2000000,.20],[2400000,.25],[Infinity,.30]];
-const OLD=[[250000,0],[500000,.05],[1000000,.20],[Infinity,.30]];
+function oldSlabs(age){const ex=age>=80?500000:age>=60?300000:250000;
+  return age>=80?[[ex,0],[1000000,.20],[Infinity,.30]]:[[ex,0],[500000,.05],[1000000,.20],[Infinity,.30]];}
 function slab(t,S){let tax=0,prev=0;for(const[cap,r]of S){if(t>prev)tax+=(Math.min(t,cap)-prev)*r;prev=cap;if(t<=cap)break;}return tax;}
-function calc(){
-  const gross=num('income'), sal=$('salaried').value==='1', ded=num('ded');
-  // New regime
-  const tNew=Math.max(0,gross-(sal?75000:0));
-  let newTax=slab(tNew,NEW);
-  if(tNew<=1200000)newTax=0;                      // 87A rebate (new)
-  else{const over=tNew-1200000; newTax=Math.min(newTax,over);} // marginal relief
-  newTax*=1.04;
-  // Old regime
-  const tOld=Math.max(0,gross-(sal?50000:0)-ded);
-  let oldTax=slab(tOld,OLD);
-  if(tOld<=500000)oldTax=0;                       // 87A rebate (old)
-  oldTax*=1.04;
-  const best=Math.min(newTax,oldTax), win=newTax<=oldTax?'New regime':'Old regime';
-  $('newTax').textContent=inr(newTax); $('oldTax').textContent=inr(oldTax);
-  $('best').textContent=inr(best);
-  $('winner').textContent=win; $('save').textContent=inr(Math.abs(newTax-oldTax));
-  $('eff').textContent=gross>0?(best/gross*100).toFixed(1)+'%':'0%';
-  $('monthly').textContent=inr((gross-best)/12)+' /mo';
-  donut($('chart'),[{f:gross>0?(gross-best)/gross:1,c:'#4f46e5'},{f:gross>0?best/gross:0,c:'#f43f5e'}]);
+function surcharge(tax,totalIncome,isNew){
+  let r=0;
+  if(totalIncome>50000000)r=isNew?.25:.37;
+  else if(totalIncome>20000000)r=.25;
+  else if(totalIncome>10000000)r=.15;
+  else if(totalIncome>5000000)r=.10;
+  return tax*r;
 }
-['income','ded'].forEach(id=>sync(id,calc));
-$('salaried').addEventListener('change',calc);
+function computeRegime(isNew,inp){
+  const age=inp.age;
+  // Salary head
+  const exempt=isNew?0:Math.min(inp.exempt,inp.salary);
+  const stdDed=inp.salary>0?Math.min(isNew?75000:50000,inp.salary-exempt):0;
+  const salaryNet=Math.max(0,inp.salary-exempt-stdDed);
+  // House property head: 30% standard deduction + let-out interest
+  const nav=inp.rent*0.7;
+  let houseNet=nav-inp.hlLet;
+  houseNet=isNew?Math.max(0,houseNet):Math.max(-200000,houseNet); // loss set-off old only
+  // Gross total (normal-rate) income
+  const gross=Math.max(0,salaryNet+houseNet+inp.interest+inp.other);
+  // Deductions
+  let ded=Math.min(inp.dempnps,gross); // 80CCD(2) both regimes
+  if(!isNew){
+    ded+=Math.min(inp.d80c,150000)+Math.min(inp.d80d,100000)
+        +Math.min(inp.dnps,50000)+Math.min(inp.d80tta,age>=60?50000:10000)
+        +inp.d80g+inp.d80e+Math.min(inp.hlSelf,200000);
+    ded=Math.min(ded,gross);
+  }
+  const taxable=Math.max(0,gross-ded);
+  let tax=slab(taxable,isNew?NEW:oldSlabs(age));
+  // 87A rebate + marginal relief (new)
+  let rebate=0;
+  if(isNew){
+    if(taxable<=1200000)rebate=Math.min(tax,60000);
+    else tax=Math.min(tax,taxable-1200000); // marginal relief
+  }else if(taxable<=500000)rebate=Math.min(tax,12500);
+  tax-=rebate;
+  // Special-rate income: digital assets, flat 30%, no rebate
+  const vdaTax=inp.vda*0.30;
+  const totalIncome=taxable+inp.vda;
+  let sur=surcharge(tax+vdaTax,totalIncome,isNew);
+  // marginal relief on surcharge (simple): extra tax can't exceed income above threshold
+  const th=[[50000000,0],[20000000,0],[10000000,0],[5000000,0]].map(x=>x[0]).find(t=>totalIncome>t);
+  if(th)sur=Math.min(sur,Math.max(0,totalIncome-th));
+  const cess=(tax+vdaTax+sur)*0.04;
+  return{gross:gross+inp.vda,ded,taxable,tax:tax+vdaTax,rebate,sur,cess,total:tax+vdaTax+sur+cess};
+}
+function calc(){
+  const inp={age:parseInt($('age').value),salary:num('salary'),exempt:num('exempt'),
+    interest:num('interest'),rent:num('rent'),other:num('other'),vda:num('vda'),
+    hlSelf:num('hlSelf'),hlLet:num('hlLet'),d80c:num('d80c'),d80d:num('d80d'),
+    dnps:num('dnps'),d80tta:num('d80tta'),d80g:num('d80g'),d80e:num('d80e'),dempnps:num('dempnps')};
+  const N=computeRegime(true,inp), O=computeRegime(false,inp);
+  const newWins=N.total<=O.total, B=newWins?N:O;
+  const grossAll=inp.salary+inp.interest+inp.rent+inp.other+inp.vda;
+  $('winName').textContent=newWins?'New Regime':'Old Regime';
+  $('best').textContent=inr(B.total);
+  $('saveBadge').textContent='saves '+inr(Math.abs(N.total-O.total));
+  const rows=[['Gross total income','gross'],['Exemptions + deductions','ded'],['Taxable income','taxable'],
+              ['Income tax','tax'],['Rebate (87A)','rebate'],['Surcharge','sur'],['Cess (4%)','cess']];
+  let h='<tr><th></th><th'+(newWins?' class="win"':'')+'>New Regime</th><th'+(newWins?'':' class="win"')+'>Old Regime</th></tr>';
+  rows.forEach(([lbl,k])=>{h+='<tr><td>'+lbl+'</td><td'+(newWins?' class="win"':'')+'>'+inr(N[k])+'</td><td'+(newWins?'':' class="win"')+'>'+inr(O[k])+'</td></tr>';});
+  h+='<tr class="tot"><td>Total tax</td><td'+(newWins?' class="win"':'')+'>'+inr(N.total)+'</td><td'+(newWins?'':' class="win"')+'>'+inr(O.total)+'</td></tr>';
+  $('cmp').innerHTML=h;
+  $('monthly').textContent=inr((grossAll-B.total)/12)+' /mo';
+  $('eff').textContent=grossAll>0?(B.total/grossAll*100).toFixed(1)+'%':'0%';
+  donut($('chart'),[{f:grossAll>0?(grossAll-B.total)/grossAll:1,c:'#4f46e5'},{f:grossAll>0?B.total/grossAll:0,c:'#f43f5e'}]);
+}
+['salary','exempt','interest','rent','other','vda','hlSelf','hlLet','d80c','d80d','dnps','d80tta','d80g','d80e','dempnps'].forEach(id=>sync(id,calc));
+$('age').addEventListener('change',calc);$('fy').addEventListener('change',calc);
 calc();
 </script>
 </body>

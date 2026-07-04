@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loan Calculator — Monthly Payment &amp; Total Interest | FinCalcs</title>
+<meta name="description" content="Free loan calculator: find your monthly payment, total interest and payoff schedule for personal loans, student loans or any fixed-rate loan.">
+<link rel="canonical" href="https://morgagecalc.com/loan-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Loan Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="loan-calculator.html" class="on">Loan</a>
+    <a href="auto-loan-calculator.html">Auto Loan</a>
+    <a href="mortgage-calculator.html">Mortgage</a>
+    <a href="compound-interest-calculator.html">Compound Interest</a>
+  </nav>
+</header>
+<main>
+<h1>Loan Calculator</h1>
+<p class="sub">Calculate the monthly payment, total interest and payoff schedule for any fixed-rate loan — personal, student, or debt consolidation.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Loan amount ($)</label>
+      <input type="number" id="amt" value="20000" min="100" step="500">
+      <input type="range" id="amtR" min="1000" max="200000" step="500" value="20000">
+    </div>
+    <div class="field"><label>Interest rate (APR %)</label>
+      <input type="number" id="rate" value="9" min="0" max="36" step="0.1">
+      <input type="range" id="rateR" min="2" max="30" step="0.1" value="9">
+    </div>
+    <div class="field"><label>Loan term (years)</label>
+      <input type="number" id="yrs" value="5" min="0.5" max="30" step="0.5">
+      <input type="range" id="yrsR" min="1" max="30" step="0.5" value="5">
+    </div>
+    <div class="field"><label>Extra monthly payment ($, optional)</label>
+      <input type="number" id="extra" value="0" min="0" step="25">
+      <input type="range" id="extraR" min="0" max="2000" step="25" value="0">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Monthly payment</div><div class="val" id="pay">—</div></div>
+    <div class="row"><span>Loan amount</span><b id="prin">—</b></div>
+    <div class="row"><span>Total interest</span><b id="int">—</b></div>
+    <div class="row"><span>Total paid</span><b id="tot">—</b></div>
+    <div class="row total"><span>With extra payment — interest saved</span><b id="saved">—</b></div>
+    <div class="row"><span>With extra payment — paid off in</span><b id="payoff">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Principal vs interest"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Principal</span>
+      <span><i class="dot" style="background:#f59e0b"></i>Interest</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Yearly payoff schedule</h2>
+  <div style="overflow-x:auto"><table class="amort" id="amort"></table></div>
+</div>
+
+<section class="content">
+  <h2>How loan payments are calculated</h2>
+  <p><code>M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1)</code> — the standard amortization formula, where <code>r</code> is the monthly rate and <code>n</code> the number of payments. Extra monthly payments go straight to principal, shortening the payoff and cutting total interest.</p>
+  <h2>FAQ</h2>
+  <h3>APR vs interest rate?</h3>
+  <p>APR includes fees and is the truer cost of borrowing. Enter your APR here for the most accurate picture.</p>
+  <h3>Buying a car or home?</h3>
+  <p>Use the dedicated <a href="auto-loan-calculator.html">Auto Loan Calculator</a> (handles trade-in and sales tax) or <a href="mortgage-calculator.html">Mortgage Calculator</a> (taxes, insurance, PMI).</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const P=num('amt'), r=num('rate')/1200, n=Math.round(num('yrs')*12), extra=num('extra');
+  const pay=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+  const tot=pay*n, int0=tot-P;
+  $('pay').textContent=usd2(pay); $('prin').textContent=usd(P);
+  $('int').textContent=usd(int0); $('tot').textContent=usd(tot);
+  donut($('chart'),[{f:P/tot,c:'#4f46e5'},{f:int0/tot,c:'#f59e0b'}]);
+  // simulate with extra payments
+  let bal=P,intX=0,months=0;
+  let h='<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance</th></tr>';
+  let y=0;
+  while(bal>0&&months<600){
+    y++;let pr=0,inte=0;
+    for(let m=0;m<12&&bal>0;m++){
+      const i=bal*r,p=Math.min(pay+extra-i,bal);inte+=i;pr+=p;bal-=p;months++;
+    }
+    intX+=inte;
+    h+='<tr><td>'+y+'</td><td>'+usd(pr)+'</td><td>'+usd(inte)+'</td><td>'+usd(Math.max(0,bal))+'</td></tr>';
+  }
+  $('amort').innerHTML=h;
+  if(extra>0){
+    $('saved').textContent=usd(int0-intX);
+    $('payoff').textContent=Math.floor(months/12)+'y '+(months%12)+'m (vs '+num('yrs')+'y)';
+  }else{$('saved').textContent='$0';$('payoff').textContent=num('yrs')+' years';}
+}
+['amt','rate','yrs','extra'].forEach(id=>sync(id,calc));
+calc();
+</script>
+</body>
+</html>

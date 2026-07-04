@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mutual Fund Returns Calculator — Lumpsum Investment Growth | FinCalcs</title>
+<meta name="description" content="Free mutual fund returns calculator: estimate the future value of a lumpsum investment, total gains and CAGR-based year-by-year growth projection.">
+<link rel="canonical" href="https://morgagecalc.com/mutual-fund-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Mutual Fund Returns Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="sip-calculator.html">SIP</a>
+    <a href="mutual-fund-calculator.html" class="on">Mutual Fund</a>
+    <a href="fd-calculator.html">FD</a>
+    <a href="gst-calculator.html">GST</a>
+  </nav>
+</header>
+<main>
+<h1>Mutual Fund Returns Calculator (Lumpsum)</h1>
+<p class="sub">Estimate how a one-time mutual fund investment grows — future value, wealth gained and a year-by-year projection at your expected return.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Investment amount (₹)</label>
+      <input type="number" id="amt" value="100000" min="500" step="5000">
+      <input type="range" id="amtR" min="5000" max="10000000" step="5000" value="100000">
+    </div>
+    <div class="field"><label>Expected annual return (% CAGR)</label>
+      <input type="number" id="ret" value="12" min="1" max="30" step="0.5">
+      <input type="range" id="retR" min="4" max="24" step="0.5" value="12">
+    </div>
+    <div class="field"><label>Investment period (years)</label>
+      <input type="number" id="yrs" value="10" min="1" max="40" step="1">
+      <input type="range" id="yrsR" min="1" max="40" step="1" value="10">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Future value</div><div class="val" id="fv">—</div></div>
+    <div class="row"><span>Invested amount</span><b id="inv">—</b></div>
+    <div class="row"><span>Estimated gains</span><b id="gain">—</b></div>
+    <div class="row total"><span>Wealth multiple</span><b id="mult">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Invested vs gains"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Invested</span>
+      <span><i class="dot" style="background:#14b8a6"></i>Gains</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Year-by-year projection</h2>
+  <div style="overflow-x:auto"><table class="amort" id="growth"></table></div>
+</div>
+
+<section class="content">
+  <h2>How lumpsum returns are calculated</h2>
+  <p><code>FV = P × (1 + r)^t</code> — your investment compounding at the expected CAGR. A 12% CAGR doubles money roughly every 6 years (rule of 72). Investing monthly instead? Use the <a href="sip-calculator.html">SIP Calculator</a>.</p>
+  <h2>FAQ</h2>
+  <h3>What CAGR should I assume?</h3>
+  <p>Large-cap equity funds have historically returned 10–12%, mid/small-cap 12–15% over long horizons, debt funds 6–8%. Past returns don't guarantee future performance.</p>
+  <h3>Are returns taxed?</h3>
+  <p>Equity fund gains above ₹1.25L a year are taxed at 12.5% (LTCG, held &gt;1 year); short-term gains at 20%. This calculator shows pre-tax values.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Mutual fund investments are subject to market risk. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const P=num('amt'), r=num('ret')/100, t=num('yrs');
+  const fv=P*Math.pow(1+r,t);
+  $('fv').textContent=inr(fv); $('inv').textContent=inr(P); $('gain').textContent=inr(fv-P);
+  $('mult').textContent=P>0?(fv/P).toFixed(2)+'×':'—';
+  donut($('chart'),[{f:P/fv,c:'#4f46e5'},{f:(fv-P)/fv,c:'#14b8a6'}]);
+  let h='<tr><th>Year</th><th>Value</th><th>Gain</th></tr>';
+  for(let y=1;y<=t;y++){const v=P*Math.pow(1+r,y);
+    h+='<tr><td>'+y+'</td><td>'+inr(v)+'</td><td>'+inr(v-P)+'</td></tr>';}
+  $('growth').innerHTML=h;
+}
+['amt','ret','yrs'].forEach(id=>sync(id,calc));
+calc();
+</script>
+</body>
+</html>
