@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Federal Income Tax Calculator 2025 — Estimate Your Taxes | FinCalcs</title>
+<meta name="description" content="Free 2025 federal income tax calculator. Estimate your US federal tax by filing status using current IRS brackets and standard deduction, plus effective and marginal rates.">
+<link rel="canonical" href="https://morgagecalc.com/tax-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Federal Income Tax Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="mortgage-calculator.html">Mortgage</a>
+    <a href="tax-calculator.html" class="on">Tax</a>
+    <a href="paycheck-calculator.html">Paycheck</a>
+  </nav>
+</header>
+<main>
+<h1>Federal Income Tax Calculator (2025)</h1>
+<p class="sub">Estimate your 2025 US federal income tax using current IRS brackets. See your tax owed, effective rate and marginal bracket in real time.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Filing status</label>
+      <select id="status">
+        <option value="single" selected>Single</option>
+        <option value="mfj">Married filing jointly</option>
+        <option value="hoh">Head of household</option>
+      </select>
+    </div>
+    <div class="field"><label>Annual gross income ($)</label>
+      <input type="number" id="income" value="85000" min="0" step="500">
+      <input type="range" id="incomeR" min="0" max="500000" step="1000" value="85000">
+    </div>
+    <div class="field"><label>Pre-tax contributions — 401(k), HSA, etc. ($/yr)</label>
+      <input type="number" id="pretax" value="0" min="0" step="500">
+    </div>
+    <div class="field"><label>Deduction</label>
+      <select id="dedType">
+        <option value="std" selected>Standard deduction</option>
+        <option value="item">Itemized (enter below)</option>
+      </select>
+    </div>
+    <div class="field" id="itemWrap" style="display:none"><label>Itemized deductions ($)</label>
+      <input type="number" id="itemized" value="0" min="0" step="500">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Estimated federal tax</div><div class="val" id="tax">—</div></div>
+    <div class="row"><span>Gross income</span><b id="grossO">—</b></div>
+    <div class="row"><span>Deductions</span><b id="dedO">—</b></div>
+    <div class="row"><span>Taxable income</span><b id="taxableO">—</b></div>
+    <div class="row total"><span>Effective tax rate</span><b id="effO">—</b></div>
+    <div class="row"><span>Marginal bracket</span><b id="margO">—</b></div>
+    <div class="row"><span>After-tax income</span><b id="netO">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Tax vs take-home"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Take-home</span>
+      <span><i class="dot" style="background:#f43f5e"></i>Federal tax</span>
+    </div>
+    <p class="note">Federal income tax only — excludes FICA, state and local taxes. See the <a href="paycheck-calculator.html">paycheck calculator</a> for full take-home pay.</p>
+  </div>
+</div>
+
+<section class="content">
+  <h2>2025 federal tax brackets used</h2>
+  <p>Rates of 10%, 12%, 22%, 24%, 32%, 35% and 37% apply progressively — each rate only applies to income inside that bracket. Standard deductions for 2025: <b>$15,000</b> single, <b>$30,000</b> married filing jointly, <b>$22,500</b> head of household.</p>
+  <h2>FAQ</h2>
+  <h3>What's the difference between effective and marginal rate?</h3>
+  <p>Your marginal rate is the tax on your last dollar earned; your effective rate is total tax divided by total income — always lower, because early dollars are taxed in lower brackets.</p>
+  <h3>Does this include state tax?</h3>
+  <p>No — this estimates federal income tax only. State income tax varies from 0% (e.g., Texas, Florida) to over 13% (California top rate).</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not tax advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+const BRACKETS={
+  single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+  mfj:[[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+  hoh:[[17000,.10],[64850,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]]
+};
+const STD={single:15000,mfj:30000,hoh:22500};
+function fedTax(taxable,st){
+  let tax=0,prev=0,marg=0;
+  for(const[cap,rate]of BRACKETS[st]){
+    if(taxable>prev){tax+=(Math.min(taxable,cap)-prev)*rate;marg=rate;}
+    prev=cap; if(taxable<=cap)break;
+  }
+  return{tax,marg};
+}
+function calc(){
+  const st=$('status').value, gross=num('income'), pre=num('pretax');
+  const ded=$('dedType').value==='std'?STD[st]:num('itemized');
+  $('itemWrap').style.display=$('dedType').value==='item'?'':'none';
+  const taxable=Math.max(0,gross-pre-ded);
+  const{tax,marg}=fedTax(taxable,st);
+  const eff=gross>0?tax/gross*100:0;
+  $('tax').textContent=usd(tax); $('grossO').textContent=usd(gross);
+  $('dedO').textContent=usd(ded+pre); $('taxableO').textContent=usd(taxable);
+  $('effO').textContent=eff.toFixed(1)+'%'; $('margO').textContent=(marg*100).toFixed(0)+'%';
+  $('netO').textContent=usd(gross-tax);
+  donut($('chart'),[{f:gross>0?(gross-tax)/gross:1,c:'#4f46e5'},{f:gross>0?tax/gross:0,c:'#f43f5e'}]);
+}
+['income','pretax','itemized'].forEach(id=>sync(id,calc));
+$('status').addEventListener('change',calc); $('dedType').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

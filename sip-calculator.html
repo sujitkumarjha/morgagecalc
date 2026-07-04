@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SIP Calculator — Mutual Fund SIP Return Calculator Online | FinCalcs</title>
+<meta name="description" content="Free SIP calculator: estimate the maturity value of your monthly mutual fund SIP investments. See invested amount, wealth gained and year-by-year growth instantly.">
+<link rel="canonical" href="https://morgagecalc.com/sip-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"SIP Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="sip-calculator.html" class="on">SIP</a>
+    <a href="emi-calculator.html">EMI</a>
+    <a href="income-tax-calculator-india.html">Income Tax</a>
+    <a href="home-loan-emi-calculator.html">Home Loan</a>
+  </nav>
+</header>
+<main>
+<h1>SIP Calculator</h1>
+<p class="sub">Calculate the future value of your monthly Systematic Investment Plan (SIP) in mutual funds — total invested, estimated returns and maturity amount.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Monthly investment (₹)</label>
+      <input type="number" id="amt" value="10000" min="100" step="500">
+      <input type="range" id="amtR" min="500" max="200000" step="500" value="10000">
+    </div>
+    <div class="field"><label>Expected annual return (%)</label>
+      <input type="number" id="ret" value="12" min="1" max="30" step="0.5">
+      <input type="range" id="retR" min="4" max="24" step="0.5" value="12">
+    </div>
+    <div class="field"><label>Investment period (years)</label>
+      <input type="number" id="yrs" value="10" min="1" max="40" step="1">
+      <input type="range" id="yrsR" min="1" max="40" step="1" value="10">
+    </div>
+    <div class="field"><label>Annual step-up (increase SIP every year, %)</label>
+      <input type="number" id="step" value="0" min="0" max="25" step="1">
+      <input type="range" id="stepR" min="0" max="25" step="1" value="0">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Maturity value</div><div class="val" id="fv">—</div></div>
+    <div class="row"><span>Total invested</span><b id="inv">—</b></div>
+    <div class="row"><span>Estimated returns (wealth gained)</span><b id="gain">—</b></div>
+    <div class="row total"><span>Wealth multiple</span><b id="mult">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Invested vs returns"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Invested</span>
+      <span><i class="dot" style="background:#14b8a6"></i>Returns</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Year-by-year growth</h2>
+  <div style="overflow-x:auto"><table class="amort" id="growth"></table></div>
+</div>
+
+<section class="content">
+  <h2>How SIP returns are calculated</h2>
+  <p>Each monthly instalment compounds until maturity: <code>FV = P × ((1+i)ⁿ − 1)/i × (1+i)</code>, where <code>P</code> is the monthly SIP, <code>i</code> the monthly rate (annual ÷ 12) and <code>n</code> total months. With step-up enabled, the SIP amount rises by the chosen % each year — a powerful way to match investments to salary growth.</p>
+  <h2>FAQ</h2>
+  <h3>What return should I assume?</h3>
+  <p>Indian equity mutual funds have historically delivered 10–14% annually over long periods, but returns are market-linked and not guaranteed. Try 10% for a conservative view and 14% for an optimistic one.</p>
+  <h3>Is SIP better than a lump sum?</h3>
+  <p>SIPs average your purchase cost across market ups and downs (rupee-cost averaging) and suit monthly incomes. A lump sum can beat SIP in a steadily rising market, but requires the capital and timing confidence.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Mutual fund investments are subject to market risk. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const P0=num('amt'), annual=num('ret')/100, yrs=num('yrs'), step=num('step')/100;
+  const i=annual/12;
+  let fv=0,inv=0,P=P0,h='<tr><th>Year</th><th>Invested (cumulative)</th><th>Value at year end</th><th>Gain</th></tr>';
+  for(let y=1;y<=yrs;y++){
+    for(let m=0;m<12;m++){fv=(fv+P)*(1+i);inv+=P;}
+    h+='<tr><td>'+y+'</td><td>'+inr(inv)+'</td><td>'+inr(fv)+'</td><td>'+inr(fv-inv)+'</td></tr>';
+    P*=(1+step);
+  }
+  $('fv').textContent=inr(fv); $('inv').textContent=inr(inv);
+  $('gain').textContent=inr(fv-inv);
+  $('mult').textContent=inv>0?(fv/inv).toFixed(2)+'×':'—';
+  donut($('chart'),[{f:inv/fv,c:'#4f46e5'},{f:(fv-inv)/fv,c:'#14b8a6'}]);
+  $('growth').innerHTML=h;
+}
+['amt','ret','yrs','step'].forEach(id=>sync(id,calc));
+calc();
+</script>
+</body>
+</html>

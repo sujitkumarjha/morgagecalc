@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Income Tax Calculator India FY 2025-26 — New vs Old Regime | FinCalcs</title>
+<meta name="description" content="Free income tax calculator for India FY 2025-26 (AY 2026-27). Compare new regime vs old regime, with standard deduction, 87A rebate, cess and slab-wise breakup.">
+<link rel="canonical" href="https://morgagecalc.com/income-tax-calculator-india">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Income Tax Calculator India","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="sip-calculator.html">SIP</a>
+    <a href="emi-calculator.html">EMI</a>
+    <a href="income-tax-calculator-india.html" class="on">Income Tax</a>
+    <a href="home-loan-emi-calculator.html">Home Loan</a>
+  </nav>
+</header>
+<main>
+<h1>Income Tax Calculator — India (FY 2025-26)</h1>
+<p class="sub">Compare your tax under the new and old regimes for FY 2025-26 (AY 2026-27), including standard deduction, Section 87A rebate and 4% health &amp; education cess.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Annual gross income (₹)</label>
+      <input type="number" id="income" value="1200000" min="0" step="10000">
+      <input type="range" id="incomeR" min="300000" max="10000000" step="50000" value="1200000">
+    </div>
+    <div class="field"><label>Are you salaried? (standard deduction applies)</label>
+      <select id="salaried"><option value="1" selected>Yes</option><option value="0">No</option></select>
+    </div>
+    <div class="field"><label>Old-regime deductions — 80C, 80D, HRA, home loan interest etc. (₹)</label>
+      <input type="number" id="ded" value="150000" min="0" step="5000">
+      <input type="range" id="dedR" min="0" max="600000" step="5000" value="150000">
+    </div>
+    <p class="note">Standard deduction is applied automatically for salaried: ₹75,000 (new regime) / ₹50,000 (old regime). The deductions field applies to the old regime only.</p>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl" id="bestLbl">Your tax (best regime)</div><div class="val" id="best">—</div></div>
+    <div class="row"><span>New regime tax (incl. cess)</span><b id="newTax">—</b></div>
+    <div class="row"><span>Old regime tax (incl. cess)</span><b id="oldTax">—</b></div>
+    <div class="row total"><span>You save by choosing <b id="winner">—</b></span><b id="save">—</b></div>
+    <div class="row"><span>Effective tax rate (best)</span><b id="eff">—</b></div>
+    <div class="row"><span>Monthly in-hand impact</span><b id="monthly">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Tax vs income"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Post-tax income</span>
+      <span><i class="dot" style="background:#f43f5e"></i>Tax</span>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <h2>FY 2025-26 slabs used</h2>
+  <h3>New regime (default)</h3>
+  <p>0–4L: nil · 4–8L: 5% · 8–12L: 10% · 12–16L: 15% · 16–20L: 20% · 20–24L: 25% · above 24L: 30%. Section 87A rebate makes tax zero up to ₹12L taxable income (₹12.75L for salaried with standard deduction). 4% cess applies.</p>
+  <h3>Old regime</h3>
+  <p>0–2.5L: nil · 2.5–5L: 5% · 5–10L: 20% · above 10L: 30%, with 87A rebate up to ₹5L taxable income, ₹50,000 standard deduction, and full Chapter VI-A deductions (80C, 80D, HRA, home loan interest, etc.). 4% cess applies.</p>
+  <h2>FAQ</h2>
+  <h3>Which regime should I pick?</h3>
+  <p>The new regime usually wins unless your total deductions are large (typically ₹4L+ at higher incomes). This calculator shows the exact break-even for your numbers — just move the deductions slider.</p>
+  <h3>Is surcharge included?</h3>
+  <p>Surcharge applies above ₹50L total income (10%–25%). This tool targets typical salaried incomes and excludes surcharge; treat results above ₹50L as indicative.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not tax advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+const NEW=[[400000,0],[800000,.05],[1200000,.10],[1600000,.15],[2000000,.20],[2400000,.25],[Infinity,.30]];
+const OLD=[[250000,0],[500000,.05],[1000000,.20],[Infinity,.30]];
+function slab(t,S){let tax=0,prev=0;for(const[cap,r]of S){if(t>prev)tax+=(Math.min(t,cap)-prev)*r;prev=cap;if(t<=cap)break;}return tax;}
+function calc(){
+  const gross=num('income'), sal=$('salaried').value==='1', ded=num('ded');
+  // New regime
+  const tNew=Math.max(0,gross-(sal?75000:0));
+  let newTax=slab(tNew,NEW);
+  if(tNew<=1200000)newTax=0;                      // 87A rebate (new)
+  else{const over=tNew-1200000; newTax=Math.min(newTax,over);} // marginal relief
+  newTax*=1.04;
+  // Old regime
+  const tOld=Math.max(0,gross-(sal?50000:0)-ded);
+  let oldTax=slab(tOld,OLD);
+  if(tOld<=500000)oldTax=0;                       // 87A rebate (old)
+  oldTax*=1.04;
+  const best=Math.min(newTax,oldTax), win=newTax<=oldTax?'New regime':'Old regime';
+  $('newTax').textContent=inr(newTax); $('oldTax').textContent=inr(oldTax);
+  $('best').textContent=inr(best);
+  $('winner').textContent=win; $('save').textContent=inr(Math.abs(newTax-oldTax));
+  $('eff').textContent=gross>0?(best/gross*100).toFixed(1)+'%':'0%';
+  $('monthly').textContent=inr((gross-best)/12)+' /mo';
+  donut($('chart'),[{f:gross>0?(gross-best)/gross:1,c:'#4f46e5'},{f:gross>0?best/gross:0,c:'#f43f5e'}]);
+}
+['income','ded'].forEach(id=>sync(id,calc));
+$('salaried').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

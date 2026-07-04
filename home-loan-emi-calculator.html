@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Loan EMI Calculator — With Prepayment Savings | FinCalcs</title>
+<meta name="description" content="Free home loan EMI calculator for India. Calculate housing loan EMI, total interest, amortization schedule, and see how yearly prepayments cut your tenure and interest.">
+<link rel="canonical" href="https://morgagecalc.com/home-loan-emi-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Home Loan EMI Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="sip-calculator.html">SIP</a>
+    <a href="emi-calculator.html">EMI</a>
+    <a href="income-tax-calculator-india.html">Income Tax</a>
+    <a href="home-loan-emi-calculator.html" class="on">Home Loan</a>
+  </nav>
+</header>
+<main>
+<h1>Home Loan EMI Calculator</h1>
+<p class="sub">Calculate your housing loan EMI and total interest — and see how much an annual prepayment saves you in interest and tenure.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Loan amount (₹)</label>
+      <input type="number" id="amt" value="5000000" min="100000" step="100000">
+      <input type="range" id="amtR" min="500000" max="30000000" step="100000" value="5000000">
+    </div>
+    <div class="field"><label>Interest rate (% p.a.)</label>
+      <input type="number" id="rate" value="8.5" min="1" max="15" step="0.05">
+      <input type="range" id="rateR" min="6" max="13" step="0.05" value="8.5">
+    </div>
+    <div class="field"><label>Loan tenure (years)</label>
+      <input type="number" id="yrs" value="20" min="1" max="30" step="1">
+      <input type="range" id="yrsR" min="5" max="30" step="1" value="20">
+    </div>
+    <div class="field"><label>Yearly prepayment (₹, optional)</label>
+      <input type="number" id="prepay" value="0" min="0" step="10000">
+      <input type="range" id="prepayR" min="0" max="1000000" step="10000" value="0">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Monthly EMI</div><div class="val" id="emi">—</div></div>
+    <div class="row"><span>Principal</span><b id="prin">—</b></div>
+    <div class="row"><span>Total interest (no prepayment)</span><b id="int0">—</b></div>
+    <div class="row"><span>Total payment (no prepayment)</span><b id="tot0">—</b></div>
+    <div class="row total"><span>With prepayment — interest saved</span><b id="saved">—</b></div>
+    <div class="row"><span>With prepayment — loan closes in</span><b id="newTenure">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Principal vs interest"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Principal</span>
+      <span><i class="dot" style="background:#f59e0b"></i>Interest</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Yearly amortization <span id="schedNote" style="font-weight:400;color:var(--mut);font-size:.85rem"></span></h2>
+  <div style="overflow-x:auto"><table class="amort" id="amort"></table></div>
+</div>
+
+<section class="content">
+  <h2>Why prepayment matters on home loans</h2>
+  <p>Because home loan tenures are long, interest often exceeds the principal itself. Even one extra EMI per year, applied to principal, can cut a 20-year loan by 3–4 years. Use the prepayment slider above to see your exact savings.</p>
+  <h2>Tax benefits (India)</h2>
+  <p>Old regime: deduction up to ₹1.5L on principal under Section 80C and up to ₹2L on interest under Section 24(b) for self-occupied property. Compare regimes in our <a href="income-tax-calculator-india.html">Income Tax Calculator</a>.</p>
+  <h2>FAQ</h2>
+  <h3>Fixed vs floating rate?</h3>
+  <p>Most Indian home loans are floating, repo-linked. When rates change, lenders usually adjust tenure rather than EMI — recalculate here with the new rate to see the effect.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const P=num('amt'), r=num('rate')/1200, yrs=num('yrs'), n=yrs*12, pre=num('prepay');
+  const emi=r>0?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n;
+  const tot0=emi*n, int0=tot0-P;
+  $('emi').textContent=inr(emi); $('prin').textContent=inr(P);
+  $('int0').textContent=inr(int0); $('tot0').textContent=inr(tot0);
+  donut($('chart'),[{f:P/tot0,c:'#4f46e5'},{f:int0/tot0,c:'#f59e0b'}]);
+  // simulate with yearly prepayment
+  let bal=P,intP=0,months=0,h='<tr><th>Year</th><th>Principal repaid</th><th>Interest paid</th><th>Prepayment</th><th>Balance</th></tr>';
+  let y=0;
+  while(bal>0&&months<600){
+    y++;let pr=0,inte=0,pp=0;
+    for(let m=0;m<12&&bal>0;m++){
+      const i=bal*r,p=Math.min(emi-i,bal);inte+=i;pr+=p;bal-=p;months++;
+    }
+    if(bal>0&&pre>0){pp=Math.min(pre,bal);bal-=pp;}
+    intP+=inte;
+    h+='<tr><td>'+y+'</td><td>'+inr(pr+pp)+'</td><td>'+inr(inte)+'</td><td>'+inr(pp)+'</td><td>'+inr(bal)+'</td></tr>';
+  }
+  $('amort').innerHTML=h;
+  if(pre>0){
+    $('saved').textContent=inr(int0-intP);
+    $('newTenure').textContent=Math.floor(months/12)+'y '+(months%12)+'m (vs '+yrs+'y)';
+    $('schedNote').textContent='— includes ₹'+Math.round(pre).toLocaleString('en-IN')+' yearly prepayment';
+  }else{
+    $('saved').textContent='₹0';$('newTenure').textContent=yrs+' years';$('schedNote').textContent='';
+  }
+}
+['amt','rate','yrs','prepay'].forEach(id=>sync(id,calc));
+calc();
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paycheck Calculator — Take-Home Pay After Taxes 2025 | FinCalcs</title>
+<meta name="description" content="Free paycheck calculator: estimate your take-home pay after federal tax, Social Security, Medicare, state tax and 401(k) contributions. Weekly, bi-weekly or monthly.">
+<link rel="canonical" href="https://morgagecalc.com/paycheck-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Paycheck Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="mortgage-calculator.html">Mortgage</a>
+    <a href="tax-calculator.html">Tax</a>
+    <a href="paycheck-calculator.html" class="on">Paycheck</a>
+  </nav>
+</header>
+<main>
+<h1>Paycheck Calculator (Take-Home Pay)</h1>
+<p class="sub">See what actually lands in your bank account after federal income tax, Social Security, Medicare, state tax and retirement contributions — per paycheck.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Annual salary ($)</label>
+      <input type="number" id="salary" value="75000" min="0" step="500">
+      <input type="range" id="salaryR" min="15000" max="400000" step="1000" value="75000">
+    </div>
+    <div class="field"><label>Pay frequency</label>
+      <select id="freq">
+        <option value="52">Weekly</option>
+        <option value="26" selected>Bi-weekly</option>
+        <option value="24">Semi-monthly</option>
+        <option value="12">Monthly</option>
+      </select>
+    </div>
+    <div class="field"><label>Filing status</label>
+      <select id="status">
+        <option value="single" selected>Single</option>
+        <option value="mfj">Married filing jointly</option>
+        <option value="hoh">Head of household</option>
+      </select>
+    </div>
+    <div class="field"><label>401(k) contribution (% of salary)</label>
+      <input type="number" id="k401" value="5" min="0" max="50" step="0.5">
+      <input type="range" id="k401R" min="0" max="25" step="0.5" value="5">
+    </div>
+    <div class="field"><label>State income tax rate (%)</label>
+      <input type="number" id="state" value="4" min="0" max="14" step="0.1">
+      <input type="range" id="stateR" min="0" max="13.3" step="0.1" value="4">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Take-home per paycheck</div><div class="val" id="netPay">—</div></div>
+    <div class="row"><span>Gross per paycheck</span><b id="grossPay">—</b></div>
+    <div class="row"><span>Federal income tax</span><b id="fedPay">—</b></div>
+    <div class="row"><span>Social Security (6.2%)</span><b id="ssPay">—</b></div>
+    <div class="row"><span>Medicare (1.45%)</span><b id="mediPay">—</b></div>
+    <div class="row"><span>State tax</span><b id="statePay">—</b></div>
+    <div class="row"><span>401(k)</span><b id="k401Pay">—</b></div>
+    <div class="row total"><span>Annual take-home</span><b id="netYr">—</b></div>
+    <div class="row"><span>Overall deduction rate</span><b id="dedRate">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Paycheck breakdown"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>Take-home</span>
+      <span><i class="dot" style="background:#f43f5e"></i>Federal</span>
+      <span><i class="dot" style="background:#f59e0b"></i>FICA</span>
+      <span><i class="dot" style="background:#94a3b8"></i>State</span>
+      <span><i class="dot" style="background:#14b8a6"></i>401(k)</span>
+    </div>
+    <p class="note">Federal tax uses 2025 brackets + standard deduction; 401(k) is pre-tax. Social Security capped at $176,100 wages; +0.9% Medicare above $200,000.</p>
+  </div>
+</div>
+
+<section class="content">
+  <h2>How take-home pay is calculated</h2>
+  <p>Gross pay minus pre-tax 401(k), then federal income tax (2025 brackets after standard deduction), FICA (6.2% Social Security up to the wage cap + 1.45% Medicare, plus 0.9% additional Medicare over $200k), and your state's income tax rate. Enter 0% state tax for TX, FL, WA, NV, TN, SD, WY, AK, NH.</p>
+  <h2>FAQ</h2>
+  <h3>Why is my actual paycheck slightly different?</h3>
+  <p>Employers withhold using IRS Form W-4 tables, and benefits like health insurance premiums also reduce pay. This tool estimates true tax liability spread evenly across paychecks.</p>
+  <h3>Does contributing to a 401(k) lower my taxes?</h3>
+  <p>Yes — traditional 401(k) contributions reduce federal and state taxable income now. Move the slider and watch the federal tax line drop.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not tax advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+const BRACKETS={
+  single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+  mfj:[[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+  hoh:[[17000,.10],[64850,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]]
+};
+const STD={single:15000,mfj:30000,hoh:22500};
+function fedTax(t,st){let tax=0,prev=0;for(const[cap,r]of BRACKETS[st]){if(t>prev)tax+=(Math.min(t,cap)-prev)*r;prev=cap;if(t<=cap)break;}return tax;}
+function calc(){
+  const sal=num('salary'),per=parseInt($('freq').value),st=$('status').value,
+        kPct=num('k401')/100,stRate=num('state')/100;
+  const k401=sal*kPct;
+  const fed=fedTax(Math.max(0,sal-k401-STD[st]),st);
+  const ss=Math.min(sal,176100)*0.062;
+  const medi=sal*0.0145+(sal>200000?(sal-200000)*0.009:0);
+  const stateTax=Math.max(0,sal-k401)*stRate;
+  const net=sal-k401-fed-ss-medi-stateTax;
+  $('netPay').textContent=usd2(net/per); $('grossPay').textContent=usd2(sal/per);
+  $('fedPay').textContent=usd2(fed/per); $('ssPay').textContent=usd2(ss/per);
+  $('mediPay').textContent=usd2(medi/per); $('statePay').textContent=usd2(stateTax/per);
+  $('k401Pay').textContent=usd2(k401/per); $('netYr').textContent=usd(net);
+  $('dedRate').textContent=sal>0?((1-net/sal)*100).toFixed(1)+'%':'0%';
+  donut($('chart'),[{f:net/sal,c:'#4f46e5'},{f:fed/sal,c:'#f43f5e'},{f:(ss+medi)/sal,c:'#f59e0b'},{f:stateTax/sal,c:'#94a3b8'},{f:k401/sal,c:'#14b8a6'}]);
+}
+['salary','k401','state'].forEach(id=>sync(id,calc));
+$('freq').addEventListener('change',calc); $('status').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mortgage Calculator — Estimate Your Monthly Payment | FinCalcs</title>
+<meta name="description" content="Free mortgage calculator to estimate your monthly payment with principal, interest, property taxes, home insurance, PMI and HOA fees. Includes full amortization schedule.">
+<link rel="canonical" href="https://morgagecalc.com/mortgage-calculator">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Mortgage Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav>
+    <a href="index.html">All Calculators</a>
+    <a href="mortgage-calculator.html" class="on">Mortgage</a>
+    <a href="tax-calculator.html">Tax</a>
+    <a href="paycheck-calculator.html">Paycheck</a>
+  </nav>
+</header>
+<main>
+<h1>Mortgage Calculator</h1>
+<p class="sub">Estimate your total monthly mortgage payment — principal &amp; interest, property taxes, homeowners insurance, PMI and HOA — and see the full cost of your loan over time.</p>
+
+<div class="calc">
+  <div class="card">
+    <div class="field"><label>Home price <span id="priceV"></span></label>
+      <input type="number" id="price" value="400000" min="0" step="1000">
+      <input type="range" id="priceR" min="50000" max="2000000" step="5000" value="400000">
+    </div>
+    <div class="field"><label>Down payment (%)</label>
+      <input type="number" id="down" value="20" min="0" max="100" step="0.5">
+      <input type="range" id="downR" min="0" max="50" step="0.5" value="20">
+    </div>
+    <div class="field"><label>Interest rate (% / yr)</label>
+      <input type="number" id="rate" value="6.75" min="0" max="20" step="0.05">
+      <input type="range" id="rateR" min="1" max="12" step="0.05" value="6.75">
+    </div>
+    <div class="field"><label>Loan term</label>
+      <select id="term"><option value="30" selected>30 years</option><option value="20">20 years</option><option value="15">15 years</option><option value="10">10 years</option></select>
+    </div>
+    <div class="field"><label>Property tax (% of home value / yr)</label>
+      <input type="number" id="ptax" value="1.1" min="0" max="5" step="0.05">
+    </div>
+    <div class="field"><label>Home insurance ($ / yr)</label>
+      <input type="number" id="ins" value="1800" min="0" step="50">
+    </div>
+    <div class="field"><label>HOA fees ($ / mo)</label>
+      <input type="number" id="hoa" value="0" min="0" step="10">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl">Total monthly payment</div><div class="val" id="totMo">—</div></div>
+    <div class="row"><span>Principal &amp; interest</span><b id="pi">—</b></div>
+    <div class="row"><span>Property tax</span><b id="taxMo">—</b></div>
+    <div class="row"><span>Home insurance</span><b id="insMo">—</b></div>
+    <div class="row"><span>PMI</span><b id="pmiMo">—</b></div>
+    <div class="row"><span>HOA</span><b id="hoaMo">—</b></div>
+    <div class="row total"><span>Loan amount</span><b id="loanAmt">—</b></div>
+    <div class="row"><span>Total interest paid</span><b id="totInt">—</b></div>
+    <div class="row"><span>Total cost of loan</span><b id="totCost">—</b></div>
+    <svg class="donut" id="chart" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Payment breakdown"></svg>
+    <div class="legend">
+      <span><i class="dot" style="background:#4f46e5"></i>P&amp;I</span>
+      <span><i class="dot" style="background:#f59e0b"></i>Tax</span>
+      <span><i class="dot" style="background:#14b8a6"></i>Insurance</span>
+      <span><i class="dot" style="background:#f43f5e"></i>PMI</span>
+      <span><i class="dot" style="background:#94a3b8"></i>HOA</span>
+    </div>
+    <p class="note">PMI (0.55%/yr of loan) is applied automatically when the down payment is below 20%.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Amortization schedule (yearly)</h2>
+  <div style="overflow-x:auto"><table class="amort" id="amort"></table></div>
+</div>
+
+<section class="content">
+  <h2>How your mortgage payment is calculated</h2>
+  <p>The principal &amp; interest portion uses the standard fixed-rate mortgage formula: <code>M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1)</code>, where <code>P</code> is the loan amount, <code>r</code> the monthly interest rate, and <code>n</code> the number of monthly payments. Property tax, insurance, PMI and HOA are added on top to give your true monthly housing cost.</p>
+  <h2>FAQ</h2>
+  <h3>What is PMI and when do I pay it?</h3>
+  <p>Private Mortgage Insurance is typically required when your down payment is under 20%. It usually costs 0.3%–1.2% of the loan per year and can be removed once you reach 20% equity.</p>
+  <h3>Should I choose a 15-year or 30-year term?</h3>
+  <p>A 15-year loan carries a higher monthly payment but dramatically lower total interest. Toggle the term above to compare the total cost of loan figure.</p>
+</section>
+</main>
+<footer>© FinCalcs — free, private, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a></footer>
+<script src="assets/common.js"></script>
+<script>
+function calc(){
+  const price=num('price'),down=num('down'),rate=num('rate'),yrs=parseInt($('term').value),
+        ptax=num('ptax'),insY=num('ins'),hoa=num('hoa');
+  const loan=price*(1-down/100), r=rate/1200, n=yrs*12;
+  const pi=r>0?loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):loan/n;
+  const taxMo=price*ptax/100/12, insMo=insY/12, pmiMo=down<20?loan*0.0055/12:0;
+  const tot=pi+taxMo+insMo+pmiMo+hoa;
+  $('totMo').textContent=usd2(tot); $('pi').textContent=usd2(pi);
+  $('taxMo').textContent=usd2(taxMo); $('insMo').textContent=usd2(insMo);
+  $('pmiMo').textContent=pmiMo?usd2(pmiMo):'$0.00'; $('hoaMo').textContent=usd2(hoa);
+  $('loanAmt').textContent=usd(loan); $('totInt').textContent=usd(pi*n-loan);
+  $('totCost').textContent=usd(pi*n);
+  donut($('chart'),[{f:pi/tot,c:'#4f46e5'},{f:taxMo/tot,c:'#f59e0b'},{f:insMo/tot,c:'#14b8a6'},{f:pmiMo/tot,c:'#f43f5e'},{f:hoa/tot,c:'#94a3b8'}]);
+  // yearly amortization
+  let bal=loan,h='<tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Balance</th></tr>';
+  for(let y=1;y<=yrs;y++){let pr=0,inte=0;
+    for(let m=0;m<12;m++){const i=bal*r,p=pi-i;inte+=i;pr+=p;bal-=p;}
+    if(bal<0)bal=0;
+    h+='<tr><td>'+y+'</td><td>'+usd(pr)+'</td><td>'+usd(inte)+'</td><td>'+usd(bal)+'</td></tr>';}
+  $('amort').innerHTML=h;
+}
+['price','down','rate','ptax','ins','hoa'].forEach(id=>sync(id,calc));
+$('term').addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>
