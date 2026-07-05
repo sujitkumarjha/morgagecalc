@@ -112,6 +112,44 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
   <h2>Get in touch</h2>
   <p>Found a bug, spotted an outdated tax slab, or want a new calculator added? Email us at <a href="mailto:hello@morgagecalc.com">hello@morgagecalc.com</a> — corrections are especially welcome.</p>
 </section>
+
+<div class="share-bar" role="group" aria-label="Share this page">
+<style>
+.share-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:36px;padding:14px 18px;background:#fff;border:1px solid var(--bd);border-radius:12px}
+.share-bar .sh-lbl{font-weight:700;font-size:.85rem;color:var(--mut);margin-right:4px}
+.sh-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;border:0;cursor:pointer;color:#fff;transition:opacity .15s}
+.sh-btn:hover{opacity:.85}
+.sh-wa{background:#25D366}.sh-x{background:#111}.sh-fb{background:#1877F2}.sh-li{background:#0A66C2}
+.sh-cp{background:#eef2ff;color:var(--p)}.sh-nt{background:var(--p)}
+</style>
+<span class="sh-lbl">Share:</span>
+<a class="sh-btn sh-wa" data-sh="whatsapp" target="_blank" rel="noopener" href="#">WhatsApp</a>
+<a class="sh-btn sh-x" data-sh="x" target="_blank" rel="noopener" href="#">X</a>
+<a class="sh-btn sh-fb" data-sh="facebook" target="_blank" rel="noopener" href="#">Facebook</a>
+<a class="sh-btn sh-li" data-sh="linkedin" target="_blank" rel="noopener" href="#">LinkedIn</a>
+<button class="sh-btn sh-cp" data-sh="copy" type="button">Copy link</button>
+<button class="sh-btn sh-nt" data-sh="native" type="button" hidden>Share&hellip;</button>
+<script>
+(function(){
+var url=(document.querySelector('link[rel=canonical]')||{}).href||location.href;
+var title=document.title, txt=encodeURIComponent(title+' — '+url), u=encodeURIComponent(url), t=encodeURIComponent(title);
+var links={whatsapp:'https://wa.me/?text='+txt,
+x:'https://twitter.com/intent/tweet?url='+u+'&text='+t,
+facebook:'https://www.facebook.com/sharer/sharer.php?u='+u,
+linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+u};
+document.querySelectorAll('.share-bar [data-sh]').forEach(function(el){
+var k=el.getAttribute('data-sh');
+if(links[k])el.href=links[k];
+el.addEventListener('click',function(e){
+if(typeof gtag==='function')gtag('event','share',{method:k,content_type:'page',item_id:url});
+if(k==='copy'){e.preventDefault();
+(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){el.textContent='Copied!';setTimeout(function(){el.textContent='Copy link';},1600);},function(){prompt('Copy this link:',url);});}
+if(k==='native'){e.preventDefault();navigator.share({title:title,url:url}).catch(function(){});}
+});});
+if(navigator.share)document.querySelector('.share-bar [data-sh=native]').hidden=false;
+})();
+</script>
+</div>
 </main>
 <footer>© FinCalcs — free, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></footer>
 </body>
