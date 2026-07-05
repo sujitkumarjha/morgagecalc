@@ -104,8 +104,8 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 <body>
 <header>
   <a class="brand" href="index.html">Fin<span>Calcs</span></a>
-  <nav>
-    <a href="index.html">🏠 Home</a>
+  <nav aria-label="Main navigation">
+    <a href="index.html"><span aria-hidden="true">🏠</span> Home</a>
     <a href="sip-calculator.html">SIP</a>
     <a href="emi-calculator.html">EMI</a>
     <a href="income-tax-calculator-india.html" class="on">Income Tax</a>
@@ -120,13 +120,13 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
   <div class="card">
     <div class="sec">Basic details</div>
     <div class="two">
-      <div class="field"><label>Financial year</label>
+      <div class="field"><label for="salary">Financial year</label>
         <select id="fy">
           <option value="2526" selected>FY 2025-26 (AY 2026-27)</option>
           <option value="2627">FY 2026-27 (AY 2027-28)</option>
         </select>
       </div>
-      <div class="field"><label>Age group <span class="hint">affects old regime</span></label>
+      <div class="field"><label for="age">Age group <span class="hint">affects old regime</span></label>
         <select id="age">
           <option value="0" selected>Below 60</option>
           <option value="60">60 – 80 (senior)</option>
@@ -138,41 +138,41 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
     <div class="sec">Income details (annual, ₹)</div>
     <div class="field"><label>Gross salary <span class="hint">before exemptions</span></label>
       <input type="number" id="salary" value="1500000" min="0" step="10000">
-      <input type="range" id="salaryR" min="0" max="10000000" step="50000" value="1500000">
+      <input type="range" aria-label="Financial year slider" id="salaryR" min="0" max="10000000" step="50000" value="1500000">
     </div>
     <div class="two">
-      <div class="field"><label>Exempt allowances <span class="hint">HRA, LTA — old regime</span></label>
+      <div class="field"><label for="exempt">Exempt allowances <span class="hint">HRA, LTA — old regime</span></label>
         <input type="number" id="exempt" value="0" min="0" step="5000"></div>
-      <div class="field"><label>Interest income <span class="hint">savings, FD</span></label>
+      <div class="field"><label for="interest">Interest income <span class="hint">savings, FD</span></label>
         <input type="number" id="interest" value="0" min="0" step="1000"></div>
-      <div class="field"><label>Rental income received</label>
+      <div class="field"><label for="rent">Rental income received</label>
         <input type="number" id="rent" value="0" min="0" step="5000"></div>
-      <div class="field"><label>Other income <span class="hint">freelance, etc.</span></label>
+      <div class="field"><label for="other">Other income <span class="hint">freelance, etc.</span></label>
         <input type="number" id="other" value="0" min="0" step="5000"></div>
-      <div class="field"><label>Digital assets income <span class="hint">crypto/VDA — flat 30%</span></label>
+      <div class="field"><label for="vda">Digital assets income <span class="hint">crypto/VDA — flat 30%</span></label>
         <input type="number" id="vda" value="0" min="0" step="5000"></div>
-      <div class="field"><label>Home loan interest — self-occupied <span class="hint">24(b), old only</span></label>
+      <div class="field"><label for="hlSelf">Home loan interest — self-occupied <span class="hint">24(b), old only</span></label>
         <input type="number" id="hlSelf" value="0" min="0" step="5000"></div>
-      <div class="field"><label>Home loan interest — let-out</label>
+      <div class="field"><label for="hlLet">Home loan interest — let-out</label>
         <input type="number" id="hlLet" value="0" min="0" step="5000"></div>
     </div>
 
     <div class="sec">Deductions (old regime)</div>
     <div class="two">
-      <div class="field"><label>80C <span class="hint">PF, ELSS, LIC — max 1.5L</span></label>
+      <div class="field"><label for="d80c">80C <span class="hint">PF, ELSS, LIC — max 1.5L</span></label>
         <input type="number" id="d80c" value="150000" min="0" step="5000"></div>
-      <div class="field"><label>80D <span class="hint">medical insurance</span></label>
+      <div class="field"><label for="d80d">80D <span class="hint">medical insurance</span></label>
         <input type="number" id="d80d" value="0" min="0" step="1000"></div>
-      <div class="field"><label>80CCD(1B) <span class="hint">NPS — max 50K</span></label>
+      <div class="field"><label for="dnps">80CCD(1B) <span class="hint">NPS — max 50K</span></label>
         <input type="number" id="dnps" value="0" min="0" step="5000"></div>
-      <div class="field"><label>80TTA/TTB <span class="hint">savings interest</span></label>
+      <div class="field"><label for="d80tta">80TTA/TTB <span class="hint">savings interest</span></label>
         <input type="number" id="d80tta" value="0" min="0" step="1000"></div>
-      <div class="field"><label>80G <span class="hint">donations</span></label>
+      <div class="field"><label for="d80g">80G <span class="hint">donations</span></label>
         <input type="number" id="d80g" value="0" min="0" step="1000"></div>
-      <div class="field"><label>80E <span class="hint">education loan interest</span></label>
+      <div class="field"><label for="d80e">80E <span class="hint">education loan interest</span></label>
         <input type="number" id="d80e" value="0" min="0" step="1000"></div>
     </div>
-    <div class="field"><label>Employer NPS — 80CCD(2) <span class="hint">allowed in BOTH regimes</span></label>
+    <div class="field"><label for="dempnps">Employer NPS — 80CCD(2) <span class="hint">allowed in BOTH regimes</span></label>
       <input type="number" id="dempnps" value="0" min="0" step="5000"></div>
   </div>
 

@@ -90,8 +90,8 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 <body>
 <header>
   <a class="brand" href="index.html">Fin<span>Calcs</span></a>
-  <nav>
-    <a href="index.html">🏠 Home</a>
+  <nav aria-label="Main navigation">
+    <a href="index.html"><span aria-hidden="true">🏠</span> Home</a>
     <a href="mortgage-calculator.html">Mortgage</a>
     <a href="tax-calculator.html">Tax</a>
     <a href="paycheck-calculator.html" class="on">Paycheck</a>
@@ -103,11 +103,11 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 
 <div class="calc">
   <div class="card">
-    <div class="field"><label>Annual salary ($)</label>
+    <div class="field"><label for="salary">Annual salary ($)</label>
       <input type="number" id="salary" value="75000" min="0" step="500">
-      <input type="range" id="salaryR" min="15000" max="400000" step="1000" value="75000">
+      <input type="range" aria-label="Annual salary ($) slider" id="salaryR" min="15000" max="400000" step="1000" value="75000">
     </div>
-    <div class="field"><label>Pay frequency</label>
+    <div class="field"><label for="k401">Pay frequency</label>
       <select id="freq">
         <option value="52">Weekly</option>
         <option value="26" selected>Bi-weekly</option>
@@ -115,7 +115,7 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
         <option value="12">Monthly</option>
       </select>
     </div>
-    <div class="field"><label>Filing status</label>
+    <div class="field"><label for="status">Filing status</label>
       <select id="status">
         <option value="single" selected>Single</option>
         <option value="mfj">Married filing jointly</option>
@@ -124,11 +124,11 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
     </div>
     <div class="field"><label>401(k) contribution (% of salary)</label>
       <input type="number" id="k401" value="5" min="0" max="50" step="0.5">
-      <input type="range" id="k401R" min="0" max="25" step="0.5" value="5">
+      <input type="range" aria-label="Pay frequency slider" id="k401R" min="0" max="25" step="0.5" value="5">
     </div>
-    <div class="field"><label>State income tax rate (%)</label>
+    <div class="field"><label for="state">State income tax rate (%)</label>
       <input type="number" id="state" value="4" min="0" max="14" step="0.1">
-      <input type="range" id="stateR" min="0" max="13.3" step="0.1" value="4">
+      <input type="range" aria-label="State income tax rate (%) slider" id="stateR" min="0" max="13.3" step="0.1" value="4">
     </div>
   </div>
 

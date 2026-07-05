@@ -90,8 +90,8 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 <body>
 <header>
   <a class="brand" href="index.html">Fin<span>Calcs</span></a>
-  <nav>
-    <a href="index.html">🏠 Home</a>
+  <nav aria-label="Main navigation">
+    <a href="index.html"><span aria-hidden="true">🏠</span> Home</a>
     <a href="mortgage-calculator.html">Mortgage</a>
     <a href="tax-calculator.html" class="on">Tax</a>
     <a href="paycheck-calculator.html">Paycheck</a>
@@ -103,21 +103,21 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 
 <div class="calc">
   <div class="card">
-    <div class="field"><label>Filing status</label>
+    <div class="field"><label for="income">Filing status</label>
       <select id="status">
         <option value="single" selected>Single</option>
         <option value="mfj">Married filing jointly</option>
         <option value="hoh">Head of household</option>
       </select>
     </div>
-    <div class="field"><label>Annual gross income ($)</label>
+    <div class="field"><label for="dedType">Annual gross income ($)</label>
       <input type="number" id="income" value="85000" min="0" step="500">
-      <input type="range" id="incomeR" min="0" max="500000" step="1000" value="85000">
+      <input type="range" aria-label="Filing status slider" id="incomeR" min="0" max="500000" step="1000" value="85000">
     </div>
-    <div class="field"><label>Pre-tax contributions — 401(k), HSA, etc. ($/yr)</label>
+    <div class="field"><label for="pretax">Pre-tax contributions — 401(k), HSA, etc. ($/yr)</label>
       <input type="number" id="pretax" value="0" min="0" step="500">
     </div>
-    <div class="field"><label>Deduction</label>
+    <div class="field"><label for="itemized">Deduction</label>
       <select id="dedType">
         <option value="std" selected>Standard deduction</option>
         <option value="item">Itemized (enter below)</option>
