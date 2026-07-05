@@ -25,17 +25,64 @@
 <meta name="twitter:description" content="Free SIP calculator: estimate the maturity value of your monthly mutual fund SIP investments. See invested amount, wealth gained and year-by-year growth instantly.">
 <meta name="twitter:image" content="https://morgagecalc.com/og-image.png">
 
-<link rel="stylesheet" href="assets/style.css">
+<style>
+:root{--p:#4f46e5;--p2:#818cf8;--amber:#f59e0b;--teal:#14b8a6;--rose:#f43f5e;--bg:#f6f7fb;--card:#fff;--txt:#1e293b;--mut:#64748b;--bd:#e2e8f0}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6}
+header{background:#fff;border-bottom:1px solid var(--bd);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5;flex-wrap:wrap;gap:8px}
+.brand{font-size:1.25rem;font-weight:800;color:var(--txt);text-decoration:none}
+.brand span{color:var(--p)}
+nav a{color:var(--mut);text-decoration:none;margin-left:16px;font-size:.9rem}
+nav a:hover,nav a.on{color:var(--p)}
+main{max-width:1080px;margin:0 auto;padding:32px 20px}
+h1{font-size:1.9rem;margin-bottom:6px;line-height:1.25}
+.sub{color:var(--mut);margin-bottom:28px;max-width:760px}
+.calc{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start}
+@media(max-width:820px){.calc{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:24px}
+.field{margin-bottom:18px}
+.field label{display:flex;justify-content:space-between;font-weight:600;font-size:.9rem;margin-bottom:6px}
+input[type=number],select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;font-size:1rem;background:#fff;color:var(--txt)}
+input[type=number]:focus,select:focus{outline:2px solid var(--p2);border-color:var(--p)}
+input[type=range]{width:100%;accent-color:var(--p);margin-top:8px}
+.seg{display:flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.seg button{flex:1;padding:9px;border:0;background:#fff;color:var(--mut);font-weight:600;cursor:pointer;font-size:.9rem}
+.seg button.on{background:var(--p);color:#fff}
+.res-big{text-align:center;padding-bottom:16px;border-bottom:1px dashed var(--bd);margin-bottom:14px}
+.res-big .lbl{color:var(--mut);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}
+.res-big .val{font-size:2.2rem;font-weight:800;color:var(--p)}
+.row{display:flex;justify-content:space-between;padding:7px 0;font-size:.95rem}
+.row b{font-variant-numeric:tabular-nums}
+.row.total{border-top:1px solid var(--bd);margin-top:6px;padding-top:10px}
+.donut{display:block;margin:16px auto 4px}
+.legend{display:flex;gap:14px;justify-content:center;font-size:.8rem;color:var(--mut);flex-wrap:wrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.content{margin-top:48px;max-width:780px}
+.content h2{font-size:1.3rem;margin:28px 0 10px}
+.content h3{font-size:1.05rem;margin:18px 0 6px}
+.content p,.content li{color:#334155;margin-bottom:10px}
+.content code{background:#eef2ff;padding:2px 6px;border-radius:6px;font-size:.9em}
+table.amort{width:100%;border-collapse:collapse;margin-top:20px;font-size:.85rem}
+table.amort th,table.amort td{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:right;font-variant-numeric:tabular-nums}
+table.amort th:first-child,table.amort td:first-child{text-align:left}
+table.amort th{background:#f8fafc;color:var(--mut)}
+.note{font-size:.8rem;color:var(--mut);margin-top:12px}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:32px 20px;border-top:1px solid var(--bd);margin-top:48px}
+footer a{color:var(--p)}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:24px}
+.tool-card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:22px;text-decoration:none;color:var(--txt);transition:.15s;display:block}
+.tool-card:hover{border-color:var(--p);transform:translateY(-2px);box-shadow:0 6px 18px rgba(79,70,229,.08)}
+.tool-card .flag{font-size:.75rem;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.06em}
+.tool-card h3{margin:6px 0 4px;font-size:1.1rem}
+.tool-card p{color:var(--mut);font-size:.88rem;margin:0}
+</style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"SIP Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
 </script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EK2PPK2DME"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-EK2PPK2DME');
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-EK2PPK2DME',{'transport_type':'beacon'});
+window.addEventListener('load',function(){var f=function(){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-EK2PPK2DME';s.async=true;document.head.appendChild(s);};'requestIdleCallback' in window?requestIdleCallback(f,{timeout:3000}):setTimeout(f,1500);});
 </script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What return should I assume?", "acceptedAnswer": {"@type": "Answer", "text": "Indian equity mutual funds have historically delivered 10–14% annually over long periods, but returns are market-linked and not guaranteed. Try 10% for a conservative view and 14% for an optimistic one."}}, {"@type": "Question", "name": "Is SIP better than a lump sum?", "acceptedAnswer": {"@type": "Answer", "text": "SIPs average your purchase cost across market ups and downs (rupee-cost averaging) and suit monthly incomes. A lump sum can beat SIP in a steadily rising market, but requires the capital and timing confidence."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://morgagecalc.com/"}, {"@type": "ListItem", "position": 2, "name": "SIP Calculator", "item": "https://morgagecalc.com/sip-calculator"}]}</script>
@@ -104,7 +151,29 @@
 </section>
 </main>
 <footer>© FinCalcs — free, in-browser calculators. Mutual fund investments are subject to market risk. <a href="index.html">All calculators</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></footer>
-<script src="assets/common.js"></script>
+<script>
+// FinCalcs shared helpers — all client-side, no backend.
+function $(id){return document.getElementById(id)}
+function num(id){return parseFloat($(id).value)||0}
+// two-way bind a number input with its range slider (idR) and recalc
+function sync(id,fn){
+  const n=$(id),r=$(id+'R');
+  if(r){r.addEventListener('input',()=>{n.value=r.value;fn()});
+       n.addEventListener('input',()=>{r.value=n.value;fn()});}
+  else n.addEventListener('input',fn);
+}
+function usd(v){return '$'+Math.round(v).toLocaleString('en-US')}
+function usd2(v){return '$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function inr(v){return '₹'+Math.round(v).toLocaleString('en-IN')}
+// donut: parts=[{f:fraction,c:color}], renders into <svg> element (140x140)
+function donut(el,parts){
+  const C=2*Math.PI*54;let off=0,h='';
+  parts.forEach(p=>{if(p.f<=0)return;const len=Math.max(p.f*C,0);
+    h+='<circle r="54" cx="70" cy="70" fill="none" stroke="'+p.c+'" stroke-width="24" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 70 70)"/>';
+    off+=len;});
+  el.innerHTML=h;
+}
+</script>
 <script>
 function calc(){
   const P0=num('amt'), annual=num('ret')/100, yrs=num('yrs'), step=num('step')/100;
