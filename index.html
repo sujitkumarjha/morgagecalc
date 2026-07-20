@@ -112,6 +112,14 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
     googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_MR_1', [[300,250]], 'div-gpt-ad-6289870-5')
              .addService(googletag.pubads());
     googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs(true);
+    googletag.pubads().addEventListener('slotRenderEnded', function(e){
+      if(e.isEmpty){
+        var d=document.getElementById(e.slot.getSlotElementId());
+        var w=d&&(d.closest('.ad-slot')||d.closest('.ad-rail'));
+        if(w)w.style.display='none';
+      }
+    });
     googletag.enableServices();
   });
 </script>
@@ -142,6 +150,10 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
 <div id="secIN">
 <h2 style="margin-top:12px">🇮🇳 India</h2>
 <div class="grid-cards">
+  <a class="tool-card" href="fire-calculator-india.html">
+    <span class="flag">Plan</span><h3>FIRE Calculator</h3>
+    <p>When can you retire early? Pin SIP or age, solve the rest — with stress tests.</p>
+  </a>
   <a class="tool-card" href="sip-calculator.html">
     <span class="flag">Invest</span><h3>SIP Calculator</h3>
     <p>Mutual fund SIP maturity value with step-up option and year-by-year growth.</p>

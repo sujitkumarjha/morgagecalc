@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FIRE Calculator India — When Can You Retire Early? (₹, Inflation-Adjusted) | FinCalcs</title>
+<meta name="description" content="Free Indian FIRE calculator in ₹. Find your financial independence age, required SIP or sustainable expenses. Real vs nominal returns, high-inflation stress tests, Lean/Fat FIRE comparison and corpus longevity chart.">
+<link rel="canonical" href="https://morgagecalc.com/fire-calculator-india">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#4f46e5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/%3E%3Ctext x=%2250%22 y=%2270%22 font-size=%2260%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3E%E2%82%A3%3C/text%3E%3C/svg%3E">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FinCalcs">
+<meta property="og:title" content="FIRE Calculator India — When Can You Retire Early?">
+<meta property="og:description" content="Pin your SIP, income and expenses to find your FIRE age — or pin your retirement age to find the SIP you need. Inflation-adjusted, with stress tests and scenarios.">
+<meta property="og:url" content="https://morgagecalc.com/fire-calculator-india">
+<meta property="og:image" content="https://morgagecalc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FIRE Calculator India — When Can You Retire Early?">
+<meta name="twitter:description" content="Pin your SIP, income and expenses to find your FIRE age — or pin your retirement age to find the SIP you need.">
+<meta name="twitter:image" content="https://morgagecalc.com/og-image.png">
+<style>
+:root{--p:#4f46e5;--p2:#818cf8;--amber:#f59e0b;--teal:#14b8a6;--rose:#f43f5e;--bg:#f6f7fb;--card:#fff;--txt:#1e293b;--mut:#64748b;--bd:#e2e8f0}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6}
+header{background:#fff;border-bottom:1px solid var(--bd);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5;flex-wrap:wrap;gap:8px}
+.brand{font-size:1.25rem;font-weight:800;color:var(--txt);text-decoration:none}
+.brand span{color:var(--p)}
+nav a{color:var(--mut);text-decoration:none;margin-left:16px;font-size:.9rem}
+nav a:hover,nav a.on{color:var(--p)}
+main{max-width:1080px;margin:0 auto;padding:32px 20px}
+h1{font-size:1.9rem;margin-bottom:6px;line-height:1.25}
+.sub{color:var(--mut);margin-bottom:28px;max-width:760px}
+.calc{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start}
+@media(max-width:820px){.calc{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:24px}
+.field{margin-bottom:18px}
+.field label{display:flex;justify-content:space-between;font-weight:600;font-size:.9rem;margin-bottom:6px}
+input[type=number],select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;font-size:1rem;background:#fff;color:var(--txt)}
+input[type=number]:focus,select:focus{outline:2px solid var(--p2);border-color:var(--p)}
+input[type=range]{width:100%;accent-color:var(--p);margin-top:8px}
+.seg{display:flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.seg button{flex:1;padding:9px;border:0;background:#fff;color:var(--mut);font-weight:600;cursor:pointer;font-size:.9rem}
+.seg button.on{background:var(--p);color:#fff}
+.res-big{text-align:center;padding-bottom:16px;border-bottom:1px dashed var(--bd);margin-bottom:14px}
+.res-big .lbl{color:var(--mut);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}
+.res-big .val{font-size:2.2rem;font-weight:800;color:var(--p)}
+.row{display:flex;justify-content:space-between;padding:7px 0;font-size:.95rem}
+.row b{font-variant-numeric:tabular-nums}
+.row.total{border-top:1px solid var(--bd);margin-top:6px;padding-top:10px}
+.donut{display:block;margin:16px auto 4px}
+.legend{display:flex;gap:14px;justify-content:center;font-size:.8rem;color:var(--mut);flex-wrap:wrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.content{margin-top:48px;max-width:780px}
+.content h2{font-size:1.3rem;margin:28px 0 10px}
+.content h3{font-size:1.05rem;margin:18px 0 6px}
+.content p,.content li{color:#334155;margin-bottom:10px}
+.content code{background:#eef2ff;padding:2px 6px;border-radius:6px;font-size:.9em}
+table.amort{width:100%;border-collapse:collapse;margin-top:20px;font-size:.85rem}
+table.amort th,table.amort td{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:right;font-variant-numeric:tabular-nums}
+table.amort th:first-child,table.amort td:first-child{text-align:left}
+table.amort th{background:#f8fafc;color:var(--mut)}
+.note{font-size:.8rem;color:var(--mut);margin-top:12px}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:32px 20px;border-top:1px solid var(--bd);margin-top:48px}
+footer a{color:var(--p)}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:24px}
+.tool-card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:22px;text-decoration:none;color:var(--txt);transition:.15s;display:block}
+.tool-card:hover{border-color:var(--p);transform:translateY(-2px);box-shadow:0 6px 18px rgba(79,70,229,.08)}
+.tool-card .flag{font-size:.75rem;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.06em}
+.tool-card h3{margin:6px 0 4px;font-size:1.1rem}
+.tool-card p{color:var(--mut);font-size:.88rem;margin:0}
+</style>
+<style>
+.sec{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--p);margin:22px 0 10px;padding-top:14px;border-top:1px dashed var(--bd)}
+.sec:first-child{margin-top:0;padding-top:0;border-top:0}
+.hint{font-size:.75rem;color:var(--mut);font-weight:400}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:520px){.two{grid-template-columns:1fr}}
+.pinned{position:relative}
+.pinned::after{content:"📌 pinned";position:absolute;top:-2px;right:0;font-size:.65rem;color:var(--p);font-weight:700}
+.solving input{background:#eef2ff!important;color:var(--mut)!important;font-weight:700}
+.solving label{color:var(--p)}
+.scen{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.scen button{padding:6px 12px;border-radius:999px;border:1px solid var(--bd);background:#fff;font-size:.78rem;font-weight:600;color:var(--mut);cursor:pointer}
+.scen button.on{background:var(--p);color:#fff;border-color:var(--p)}
+.stress label{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;margin-bottom:8px;cursor:pointer}
+.stress input[type=checkbox]{width:16px;height:16px;accent-color:var(--rose)}
+.badge-ok{display:inline-block;background:#dcfce7;color:#166534;font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:999px}
+.badge-warn{display:inline-block;background:#fee2e2;color:#991b1b;font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:999px}
+table.cmp{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:8px}
+table.cmp th,table.cmp td{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:right;font-variant-numeric:tabular-nums}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+table.cmp th{background:#f8fafc;color:var(--mut)}
+#fireChart{width:100%;height:340px;display:block}
+.chart-tog{display:flex;gap:8px;align-items:center;justify-content:flex-end;font-size:.78rem;color:var(--mut);margin-bottom:6px}
+.chart-tog button{padding:4px 12px;border-radius:999px;border:1px solid var(--bd);background:#fff;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--mut)}
+.chart-tog button.on{background:var(--p);color:#fff;border-color:var(--p)}
+</style>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-EK2PPK2DME',{'transport_type':'beacon'});
+window.addEventListener('load',function(){var f=function(){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-EK2PPK2DME';s.async=true;document.head.appendChild(s);};'requestIdleCallback' in window?requestIdleCallback(f,{timeout:3000}):setTimeout(f,1500);});
+</script>
+<!-- Start GPT Tag -->
+<style>
+.ad-slot{display:flex;flex-direction:column;align-items:center;margin:24px auto;overflow:hidden}
+.ad-slot .ad-lbl{font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.ad-lb{min-height:90px}.ad-mr{min-height:250px}
+.ad-rail{position:fixed;top:110px;z-index:1;display:none;width:120px;min-height:600px}
+@media(min-width:1440px){.ad-rail{display:block}}
+.ad-rail.rail-l{left:14px}.ad-rail.rail-r{right:14px}
+</style>
+<script async src='https://securepubads.g.doubleclick.net/tag/js/gpt.js'></script>
+<script>
+  window.googletag = window.googletag || {cmd: []};
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_SS_2', [[120,600]], 'div-gpt-ad-6289870-1')
+             .addService(googletag.pubads());
+    googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_SS_1', [[120,600]], 'div-gpt-ad-6289870-2')
+             .addService(googletag.pubads());
+    googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_MR_2', [[300,250]], 'div-gpt-ad-6289870-3')
+             .addService(googletag.pubads());
+    googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_LB', [[728,90],[970,90]], 'div-gpt-ad-6289870-4')
+             .addService(googletag.pubads());
+    googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_MR_1', [[300,250]], 'div-gpt-ad-6289870-5')
+             .addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs(true);
+    googletag.pubads().addEventListener('slotRenderEnded', function(e){
+      if(e.isEmpty){
+        var d=document.getElementById(e.slot.getSlotElementId());
+        var w=d&&(d.closest('.ad-slot')||d.closest('.ad-rail'));
+        if(w)w.style.display='none';
+      }
+    });
+    googletag.enableServices();
+  });
+</script>
+<!-- End GPT Tag -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"FIRE Calculator India","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://morgagecalc.com/"},{"@type":"ListItem","position":2,"name":"FIRE Calculator India","item":"https://morgagecalc.com/fire-calculator-india"}]}</script>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Fin<span>Calcs</span></a>
+  <nav aria-label="Main navigation">
+    <a href="index.html"><span aria-hidden="true">🏠</span> Home</a>
+    <a href="fire-calculator-india.html" class="on">FIRE</a>
+    <a href="sip-calculator.html">SIP</a>
+    <a href="income-tax-calculator-india.html">Income Tax</a>
+    <a href="mutual-fund-calculator.html">Mutual Fund</a>
+  </nav>
+</header>
+<main>
+<h1>FIRE Calculator — India</h1>
+<p class="sub">Financial Independence, Retire Early — in rupees, with realistic Indian inflation. Pin what you know (SIP, income, expenses, or retirement age) and solve for the rest. Stress-test the plan before you trust it.</p>
+<div class="ad-slot ad-lb"><span class="ad-lbl">Advertisement</span>
+<!-- GPT AdSlot Fincalc_LB 728x90/970x90 -->
+<div id='div-gpt-ad-6289870-4'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-6289870-4'); });</script>
+</div>
+</div>
+
+<div class="card" style="margin-bottom:24px">
+  <div class="sec">What should we solve for?</div>
+  <div class="seg" role="group" aria-label="Solve mode">
+    <button type="button" id="modeAge" class="on">FIRE Age <span class="hint">(SIP &amp; expenses pinned)</span></button>
+    <button type="button" id="modeSip">Required SIP <span class="hint">(retirement age pinned)</span></button>
+    <button type="button" id="modeExp">Sustainable Expenses <span class="hint">(age &amp; SIP pinned)</span></button>
+  </div>
+</div>
+
+<div class="calc">
+  <div class="card">
+    <div class="sec">About you</div>
+    <div class="two">
+      <div class="field"><label for="age">Current age</label>
+        <input type="number" id="age" value="30" min="18" max="70" step="1"></div>
+      <div class="field"><label for="lifeExp">Plan till age <span class="hint">life expectancy</span></label>
+        <input type="number" id="lifeExp" value="85" min="60" max="100" step="1"></div>
+    </div>
+    <div class="field" id="fRetAge"><label for="retAge">Retirement age <span class="hint">pin when solving SIP/expenses</span></label>
+      <input type="number" id="retAge" value="45" min="25" max="75" step="1">
+      <input type="range" aria-label="Retirement age slider" id="retAgeR" min="30" max="70" step="1" value="45"></div>
+
+    <div class="sec">Money today (₹, monthly)</div>
+    <div class="field"><label for="corpus">Current corpus / investments (₹ total)</label>
+      <input type="number" id="corpus" value="1000000" min="0" step="100000">
+      <input type="range" aria-label="Current corpus slider" id="corpusR" min="0" max="50000000" step="100000" value="1000000"></div>
+    <div class="two">
+      <div class="field"><label for="income">Monthly income</label>
+        <input type="number" id="income" value="150000" min="0" step="5000"></div>
+      <div class="field" id="fExp"><label for="expenses">Monthly expenses</label>
+        <input type="number" id="expenses" value="60000" min="0" step="1000"></div>
+      <div class="field" id="fSip"><label for="sip">Monthly SIP</label>
+        <input type="number" id="sip" value="50000" min="0" step="1000"></div>
+      <div class="field"><label for="stepup">SIP step-up % / yr</label>
+        <input type="number" id="stepup" value="5" min="0" max="20" step="1"></div>
+    </div>
+
+    <div class="sec">Economy assumptions</div>
+    <div class="scen" role="group" aria-label="Economy scenarios">
+      <button type="button" data-scen="base" class="on">Base (12% / 6%)</button>
+      <button type="button" data-scen="opt">Optimistic (14% / 5%)</button>
+      <button type="button" data-scen="cons">Conservative (10% / 7%)</button>
+      <button type="button" data-scen="stag">Stagflation (8% / 8%)</button>
+    </div>
+    <div class="two">
+      <div class="field"><label for="retPre">Pre-retirement return % <span class="hint">nominal</span></label>
+        <input type="number" id="retPre" value="12" min="1" max="20" step="0.5"></div>
+      <div class="field"><label for="retPost">Post-retirement return % <span class="hint">nominal</span></label>
+        <input type="number" id="retPost" value="9" min="1" max="15" step="0.5"></div>
+      <div class="field"><label for="infl">Inflation % / yr</label>
+        <input type="number" id="infl" value="6" min="2" max="12" step="0.5"></div>
+      <div class="field"><label for="swr">Withdrawal rule</label>
+        <select id="swr">
+          <option value="25">4% SWR (25× expenses)</option>
+          <option value="28.6">3.5% SWR (~29× expenses)</option>
+          <option value="33.3" selected>3% SWR (~33× — safer for India)</option>
+          <option value="40">2.5% SWR (40× — very safe)</option>
+        </select></div>
+    </div>
+
+    <div class="sec">Stress tests</div>
+    <div class="stress">
+      <label><input type="checkbox" id="stRet"> Returns 2% lower than expected</label>
+      <label><input type="checkbox" id="stInf"> Inflation 2% higher than expected</label>
+      <label><input type="checkbox" id="stCrash"> Market crashes <input type="number" id="crashPct" value="30" min="10" max="60" step="5" style="width:64px;padding:4px 6px;display:inline-block"> % the day you retire</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="res-big"><div class="lbl" id="resLbl">You can FIRE at age</div><div class="val" id="resMain">—</div></div>
+    <div class="row"><span>FIRE number (target corpus, then-₹)</span><b id="fireNum">—</b></div>
+    <div class="row"><span>FIRE number in today's ₹</span><b id="fireNumReal">—</b></div>
+    <div class="row"><span>Real return pre / post retirement</span><b id="realRet">—</b></div>
+    <div class="row"><span>Savings rate</span><b id="saveRate">—</b></div>
+    <div class="row"><span>Corpus lasts till age</span><b id="lastsTill">—</b></div>
+    <div class="row total"><span>With stress tests applied</span><b id="stressRes">—</b></div>
+    <p class="note" id="verdict"></p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem;margin-bottom:4px">Corpus projection</h2>
+  <div class="chart-tog">View: <button type="button" id="togNom" class="on">Nominal ₹</button> <button type="button" id="togReal">Today's ₹ (real)</button></div>
+  <canvas id="fireChart" height="340" role="img" aria-label="Corpus growth and drawdown chart"></canvas>
+  <div class="legend" style="margin-top:8px">
+    <span><i class="dot" style="background:#4f46e5"></i>Corpus</span>
+    <span><i class="dot" style="background:#f43f5e"></i>Retirement</span>
+    <span><i class="dot" style="background:#f59e0b"></i>FIRE number</span>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="font-size:1.15rem">Lean vs Regular vs Fat FIRE</h2>
+  <p class="hint" style="margin-bottom:4px">Same inputs, three lifestyles: Lean = 70% of your expenses, Fat = 150%.</p>
+  <div style="overflow-x:auto"><table class="cmp" id="cmpTable"></table></div>
+</div>
+<div class="ad-slot ad-mr"><span class="ad-lbl">Advertisement</span>
+<!-- GPT AdSlot Fincalc_MR_1 300x250 -->
+<div id='div-gpt-ad-6289870-5'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-6289870-5'); });</script>
+</div>
+</div>
+
+<section class="content">
+  <h2>How this FIRE calculator works</h2>
+  <p>The engine simulates your corpus month by month. While you work, it grows at your pre-retirement return with your SIP added (stepped up yearly) while your expenses inflate. You reach <b>FI</b> when the corpus crosses your FIRE number — the withdrawal-rule multiple (25× to 40×) of your <em>inflated</em> annual expenses at that date. After retirement it simulates the drawdown: the corpus earns your post-retirement return while inflating expenses are withdrawn, and the calculator reports the age your money actually lasts till — the honest test of whether you can RE, not just FI.</p>
+  <h2>Real vs nominal returns</h2>
+  <p>A 12% return with 6% inflation is a <code>(1.12/1.06 − 1) ≈ 5.7%</code> real return — that's the number that grows your purchasing power. This calculator does all math in nominal terms with explicit inflation, then shows results in both then-₹ and today's ₹, so a ₹10 crore corpus 20 years out isn't mistaken for ₹10 crore of today's spending power.</p>
+  <h2>Why 4% SWR may not fit India</h2>
+  <p>The 4% rule comes from US market history with ~3% inflation. India's higher and more volatile inflation means many planners prefer 3–3.5% withdrawal (≈29–33× expenses). This calculator defaults to 3% but lets you choose — and the stress tests show what +2% inflation does to your plan.</p>
+  <h2>FAQ</h2>
+  <h3>What's the difference between FI and RE?</h3>
+  <p>FI is when your corpus crosses the target multiple of expenses. RE adds the harder question: will it survive 40+ years of withdrawals? The "corpus lasts till" line answers that with a full drawdown simulation, not a rule of thumb.</p>
+  <h3>Should my SIP step up every year?</h3>
+  <p>Yes if your income grows — a 5–10% annual step-up mirrors salary growth and can pull your FIRE age in by several years. Set it to 0 to model a flat SIP.</p>
+  <h3>Which economy scenario should I use?</h3>
+  <p>Plan on Base or Conservative and check that even Stagflation doesn't break you. If your FIRE age only works in the Optimistic scenario, it's a hope, not a plan.</p>
+</section>
+<div class="ad-slot ad-mr"><span class="ad-lbl">Advertisement</span>
+<!-- GPT AdSlot Fincalc_MR_2 300x250 -->
+<div id='div-gpt-ad-6289870-3'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-6289870-3'); });</script>
+</div>
+</div>
+<div class="share-bar" role="group" aria-label="Share this page">
+<style>
+.share-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:36px;padding:14px 18px;background:#fff;border:1px solid var(--bd);border-radius:12px}
+.share-bar .sh-lbl{font-weight:700;font-size:.85rem;color:var(--mut);margin-right:4px}
+.sh-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;border:0;cursor:pointer;color:#fff;transition:opacity .15s}
+.sh-btn:hover{opacity:.85}
+.sh-wa{background:#25D366}.sh-x{background:#111}.sh-fb{background:#1877F2}.sh-li{background:#0A66C2}
+.sh-cp{background:#eef2ff;color:var(--p)}.sh-nt{background:var(--p)}
+</style>
+<span class="sh-lbl">Share:</span>
+<a class="sh-btn sh-wa" data-sh="whatsapp" target="_blank" rel="noopener" href="#">WhatsApp</a>
+<a class="sh-btn sh-x" data-sh="x" target="_blank" rel="noopener" href="#">X</a>
+<a class="sh-btn sh-fb" data-sh="facebook" target="_blank" rel="noopener" href="#">Facebook</a>
+<a class="sh-btn sh-li" data-sh="linkedin" target="_blank" rel="noopener" href="#">LinkedIn</a>
+<button class="sh-btn sh-cp" data-sh="copy" type="button">Copy link</button>
+<button class="sh-btn sh-nt" data-sh="native" type="button" hidden>Share&hellip;</button>
+<script>
+(function(){
+var url=(document.querySelector('link[rel=canonical]')||{}).href||location.href;
+var title=document.title, txt=encodeURIComponent(title+' — '+url), u=encodeURIComponent(url), t=encodeURIComponent(title);
+var links={whatsapp:'https://wa.me/?text='+txt,
+x:'https://twitter.com/intent/tweet?url='+u+'&text='+t,
+facebook:'https://www.facebook.com/sharer/sharer.php?u='+u,
+linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+u};
+document.querySelectorAll('.share-bar [data-sh]').forEach(function(el){
+var k=el.getAttribute('data-sh');
+if(links[k])el.href=links[k];
+el.addEventListener('click',function(e){
+if(typeof gtag==='function')gtag('event','share',{method:k,content_type:'page',item_id:url});
+if(k==='copy'){e.preventDefault();
+(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){el.textContent='Copied!';setTimeout(function(){el.textContent='Copy link';},1600);},function(){prompt('Copy this link:',url);});}
+if(k==='native'){e.preventDefault();navigator.share({title:title,url:url}).catch(function(){});}
+});});
+if(navigator.share)document.querySelector('.share-bar [data-sh=native]').hidden=false;
+})();
+</script>
+</div>
+<div class="ad-rail rail-l">
+<!-- GPT AdSlot Fincalc_SS_1 120x600 -->
+<div id='div-gpt-ad-6289870-2'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-6289870-2'); });</script>
+</div>
+</div>
+<div class="ad-rail rail-r">
+<!-- GPT AdSlot Fincalc_SS_2 120x600 -->
+<div id='div-gpt-ad-6289870-1'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-6289870-1'); });</script>
+</div>
+</main>
+<footer>© FinCalcs — free, in-browser calculators. Estimates only, not financial advice. <a href="index.html">All calculators</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></footer>
+<script>
+// FinCalcs shared helpers — all client-side, no backend.
+function $(id){return document.getElementById(id)}
+function num(id){return parseFloat($(id).value)||0}
+// two-way bind a number input with its range slider (idR) and recalc
+function sync(id,fn){
+  const n=$(id),r=$(id+'R');
+  if(r){r.addEventListener('input',()=>{n.value=r.value;fn()});
+       n.addEventListener('input',()=>{r.value=n.value;fn()});}
+  else n.addEventListener('input',fn);
+}
+function usd(v){return '$'+Math.round(v).toLocaleString('en-US')}
+function usd2(v){return '$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function inr(v){return '₹'+Math.round(v).toLocaleString('en-IN')}
+// donut: parts=[{f:fraction,c:color}], renders into <svg> element (140x140)
+function donut(el,parts){
+  const C=2*Math.PI*54;let off=0,h='';
+  parts.forEach(p=>{if(p.f<=0)return;const len=Math.max(p.f*C,0);
+    h+='<circle r="54" cx="70" cy="70" fill="none" stroke="'+p.c+'" stroke-width="24" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 70 70)"/>';
+    off+=len;});
+  el.innerHTML=h;
+}
+</script>
+<script>
+/* ---------- helpers ---------- */
+function inrS(v){ // short Indian format
+  if(!isFinite(v)) return '—';
+  var neg=v<0?'-':''; v=Math.abs(v);
+  if(v>=1e7) return neg+'₹'+(v/1e7).toFixed(2)+' Cr';
+  if(v>=1e5) return neg+'₹'+(v/1e5).toFixed(1)+' L';
+  return neg+'₹'+Math.round(v).toLocaleString('en-IN');
+}
+function ageStr(months, baseAge){
+  if(months==null) return 'Not before 90';
+  var a=baseAge+months/12, y=Math.floor(a), m=Math.round((a-y)*12);
+  if(m===12){y++;m=0;}
+  return y+(m?('y '+m+'m'):'');
+}
+/* ---------- engine ---------- */
+function readParams(stressed){
+  var p={
+    age:num('age'), lifeExp:num('lifeExp'), retAge:num('retAge'),
+    corpus:num('corpus'), income:num('income'), expenses:num('expenses'),
+    sip:num('sip'), stepup:num('stepup')/100,
+    rPre:num('retPre')/100, rPost:num('retPost')/100, infl:num('infl')/100,
+    mult:parseFloat($('swr').value), crash:0
+  };
+  if(stressed){
+    if($('stRet').checked){p.rPre-=0.02;p.rPost-=0.02;}
+    if($('stInf').checked){p.infl+=0.02;}
+    if($('stCrash').checked){p.crash=num('crashPct')/100;}
+  }
+  return p;
+}
+// simulate accumulation for m months; returns {corpus, expMonthly (inflated), sip}
+function accumulate(p, months, sipOverride){
+  var c=p.corpus, sip=(sipOverride!=null?sipOverride:p.sip), exp=p.expenses;
+  var mPre=Math.pow(1+p.rPre,1/12)-1, mInf=Math.pow(1+p.infl,1/12)-1, mStep=Math.pow(1+p.stepup,1/12)-1;
+  for(var m=0;m<months;m++){
+    c=c*(1+mPre)+sip;
+    sip*=(1+mStep); exp*=(1+mInf);
+  }
+  return {corpus:c, exp:exp};
+}
+// simulate drawdown from retirement; returns months survived (capped)
+function drawdown(p, corpusAtRet, expMonthlyAtRet, monthsToLive){
+  var c=corpusAtRet*(1-p.crash), exp=expMonthlyAtRet;
+  var mPost=Math.pow(1+p.rPost,1/12)-1, mInf=Math.pow(1+p.infl,1/12)-1;
+  for(var m=0;m<monthsToLive;m++){
+    c=c*(1+mPost)-exp;
+    exp*=(1+mInf);
+    if(c<=0) return m;
+  }
+  return monthsToLive; // survived
+}
+function fireNumberAt(p, expMonthly){ return p.mult*expMonthly*12; }
+// earliest month where corpus >= FIRE number (multiple rule), searching to age 90
+function solveFireMonths(p, sipOverride, expScale){
+  var maxM=Math.round((90-p.age)*12);
+  var c=p.corpus, sip=(sipOverride!=null?sipOverride:p.sip), exp=p.expenses*(expScale||1);
+  var mPre=Math.pow(1+p.rPre,1/12)-1, mInf=Math.pow(1+p.infl,1/12)-1, mStep=Math.pow(1+p.stepup,1/12)-1;
+  for(var m=0;m<=maxM;m++){
+    if(c*(1-p.crash)>=fireNumberAt(p,exp)) return {months:m, corpus:c, exp:exp};
+    c=c*(1+mPre)+sip; sip*=(1+mStep); exp*=(1+mInf);
+  }
+  return {months:null, corpus:c, exp:exp};
+}
+function solveSip(p, expScale){ // binary search sip to hit FIRE number at pinned retAge
+  var months=Math.max(1,Math.round((p.retAge-p.age)*12));
+  var lo=0, hi=5e6;
+  var need=function(s){var a=accumulate(p,months,s); return a.corpus*(1-p.crash)-fireNumberAt(p,a.exp*(expScale||1)/ (1));};
+  // note: expenses path independent of sip; scale expenses if lean/fat
+  var target=function(s){
+    var a=accumulate(p,months,s);
+    var exp=p.expenses*(expScale||1)*Math.pow(1+p.infl,months/12);
+    return a.corpus*(1-p.crash)-p.mult*exp*12;
+  };
+  if(target(hi)<0) return null;
+  for(var i=0;i<48;i++){var mid=(lo+hi)/2; if(target(mid)>=0)hi=mid;else lo=mid;}
+  return hi;
+}
+function solveExpenses(p){ // max monthly expenses (today's ₹) sustainable at pinned retAge with pinned sip
+  var months=Math.max(1,Math.round((p.retAge-p.age)*12));
+  var a=accumulate(p,months,null);
+  var corpusRet=a.corpus*(1-p.crash);
+  var lo=0, hi=1e7;
+  for(var i=0;i<48;i++){
+    var mid=(lo+hi)/2;
+    var expAtRet=mid*Math.pow(1+p.infl,months/12);
+    if(p.mult*expAtRet*12<=corpusRet)lo=mid;else hi=mid;
+  }
+  return lo;
+}
+// full path for chart: monthly corpus from now to lifeExp given a retirement month
+function buildPath(p, retMonths, sipOverride, expScale){
+  var path=[], c=p.corpus, sip=(sipOverride!=null?sipOverride:p.sip), exp=p.expenses*(expScale||1);
+  var mPre=Math.pow(1+p.rPre,1/12)-1, mPost=Math.pow(1+p.rPost,1/12)-1,
+      mInf=Math.pow(1+p.infl,1/12)-1, mStep=Math.pow(1+p.stepup,1/12)-1;
+  var totalM=Math.round((p.lifeExp-p.age)*12), depleted=null;
+  for(var m=0;m<=totalM;m++){
+    path.push({m:m, c:Math.max(0,c), exp:exp});
+    if(m===retMonths && p.crash>0) c*=(1-p.crash);
+    if(m<retMonths){ c=c*(1+mPre)+sip; sip*=(1+mStep); }
+    else { c=c*(1+mPost)-exp; if(c<=0&&depleted==null){depleted=m;c=0;} }
+    exp*=(1+mInf);
+  }
+  return {path:path, depleted:depleted};
+}
+/* ---------- UI state ---------- */
+var mode='age', chartReal=false, lastResult={};
+function setMode(m){
+  mode=m;
+  $('modeAge').classList.toggle('on',m==='age');
+  $('modeSip').classList.toggle('on',m==='sip');
+  $('modeExp').classList.toggle('on',m==='exp');
+  $('fRetAge').classList.toggle('solving',m==='age');
+  $('fSip').classList.toggle('solving',m==='sip');
+  $('fExp').classList.toggle('solving',m==='exp');
+  $('fRetAge').classList.toggle('pinned',m!=='age');
+  $('fSip').classList.toggle('pinned',m!=='sip');
+  $('fExp').classList.toggle('pinned',m!=='exp');
+  $('retAge').disabled=(m==='age'); $('retAgeR').disabled=(m==='age');
+  $('sip').disabled=(m==='sip');
+  $('expenses').disabled=(m==='exp');
+  calc();
+}
+function runMode(p){
+  // returns {retMonths, sip, expenses, label, mainText}
+  if(mode==='age'){
+    var r=solveFireMonths(p,null,1);
+    return {retMonths:r.months, sip:p.sip, exp:p.expenses,
+            main:r.months==null?'90+':ageStr(r.months,p.age), lbl:'You can FIRE at age'};
+  }
+  if(mode==='sip'){
+    var s=solveSip(p,1);
+    return {retMonths:Math.round((p.retAge-p.age)*12), sip:s, exp:p.expenses,
+            main:s==null?'Not achievable':inrS(s)+'/mo', lbl:'Required monthly SIP to FIRE at '+p.retAge};
+  }
+  var e=solveExpenses(p);
+  return {retMonths:Math.round((p.retAge-p.age)*12), sip:p.sip, exp:e,
+          main:inrS(e)+'/mo', lbl:'Sustainable expenses (today\'s ₹) to FIRE at '+p.retAge};
+}
+function calc(){
+  var p=readParams(false), ps=readParams(true);
+  var r=runMode(p);
+  lastResult={p:p, r:r};
+  $('resLbl').textContent=r.lbl;
+  $('resMain').textContent=r.main;
+  // fire number + drawdown for the solved plan
+  if(r.retMonths!=null){
+    var yrs=r.retMonths/12;
+    var expAtRet=r.exp*Math.pow(1+p.infl,yrs);
+    var fn=p.mult*expAtRet*12;
+    $('fireNum').textContent=inrS(fn);
+    $('fireNumReal').textContent=inrS(fn/Math.pow(1+p.infl,yrs));
+    var sim=buildPath(p,r.retMonths,(mode==='sip'?r.sip:null),(mode==='exp'?r.exp/p.expenses:1));
+    var lasts=sim.depleted==null?p.lifeExp+'+ ✓':ageStr(sim.depleted,p.age)+' ⚠';
+    $('lastsTill').innerHTML=sim.depleted==null?'<span class="badge-ok">'+p.lifeExp+'+ (survives)</span>':'<span class="badge-warn">'+ageStr(sim.depleted,p.age)+' (falls short)</span>';
+    $('verdict').textContent=sim.depleted==null
+      ?'Your plan survives to age '+p.lifeExp+' in this scenario. Now check it under stress tests and Conservative/Stagflation scenarios.'
+      :'Warning: with these assumptions the corpus runs out at '+ageStr(sim.depleted,p.age)+'. Increase the multiple, SIP, or retirement age.';
+    drawChart(sim,p,r);
+  } else {
+    $('fireNum').textContent='—';$('fireNumReal').textContent='—';
+    $('lastsTill').textContent='—';$('verdict').textContent='FIRE not reachable before 90 with these inputs.';
+  }
+  var realPre=((1+p.rPre)/(1+p.infl)-1)*100, realPost=((1+p.rPost)/(1+p.infl)-1)*100;
+  $('realRet').textContent=realPre.toFixed(1)+'% / '+realPost.toFixed(1)+'%';
+  var sr=p.income>0?(mode==='sip'&&r.sip!=null?r.sip:p.sip)/p.income*100:0;
+  $('saveRate').textContent=sr.toFixed(0)+'% of income';
+  // stress result
+  var rs=runMode(ps);
+  $('stressRes').textContent=($('stRet').checked||$('stInf').checked||$('stCrash').checked)?rs.main:'none selected';
+  buildCompare(p);
+}
+function buildCompare(p){
+  var rows=[['Lean FIRE (70% expenses)',0.7],['Regular FIRE',1],['Fat FIRE (150% expenses)',1.5]];
+  var h='<tr><th>Lifestyle</th><th>Monthly spend (today)</th><th>'+(mode==='sip'?'Required SIP':'FIRE age')+'</th><th>FIRE number (today\'s ₹)</th></tr>';
+  rows.forEach(function(row){
+    var scale=row[1], res, fnReal;
+    if(mode==='sip'){
+      var s=solveSip(p,scale);
+      res=s==null?'—':inrS(s)+'/mo';
+      var yrs=p.retAge-p.age;
+      fnReal=p.mult*p.expenses*scale*12;
+    } else {
+      var r=solveFireMonths(p,null,scale);
+      res=r.months==null?'90+':ageStr(r.months,p.age);
+      fnReal=p.mult*p.expenses*scale*12;
+    }
+    h+='<tr><td>'+row[0]+'</td><td>'+inrS(p.expenses*scale)+'</td><td><b>'+res+'</b></td><td>'+inrS(fnReal)+'</td></tr>';
+  });
+  $('cmpTable').innerHTML=h;
+}
+/* ---------- chart ---------- */
+function drawChart(sim,p,r){
+  var cv=$('fireChart'), ctx=cv.getContext('2d');
+  var W=cv.clientWidth||900; cv.width=W*2; cv.height=680; ctx.scale(2,2);
+  var H=340, padL=64, padR=16, padT=16, padB=30;
+  ctx.clearRect(0,0,W,H);
+  var pts=sim.path.filter(function(_,i){return i%3===0;});
+  var defl=function(pt){return chartReal?pt.c/Math.pow(1+p.infl,pt.m/12):pt.c;};
+  var maxV=0; pts.forEach(function(pt){maxV=Math.max(maxV,defl(pt));});
+  maxV*=1.08; if(maxV<=0)maxV=1;
+  var X=function(m){return padL+(W-padL-padR)*m/sim.path[sim.path.length-1].m;};
+  var Y=function(v){return padT+(H-padT-padB)*(1-v/maxV);};
+  // gridlines + y labels
+  ctx.font='10px system-ui'; ctx.fillStyle='#94a3b8'; ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+  for(var g=0;g<=4;g++){var v=maxV*g/4, y=Y(v);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke();
+    ctx.fillText(inrS(v),4,y+3);}
+  // x labels (ages)
+  for(var a=Math.ceil(p.age/5)*5;a<=p.lifeExp;a+=5){
+    var m=(a-p.age)*12; ctx.fillText(a,X(m)-6,H-8);}
+  // area + line
+  ctx.beginPath();
+  pts.forEach(function(pt,i){var x=X(pt.m),y=Y(defl(pt)); i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+  ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2; ctx.stroke();
+  ctx.lineTo(X(pts[pts.length-1].m),Y(0)); ctx.lineTo(X(0),Y(0)); ctx.closePath();
+  ctx.fillStyle='rgba(79,70,229,.08)'; ctx.fill();
+  // retirement marker
+  if(r.retMonths!=null){
+    var rx=X(r.retMonths);
+    ctx.strokeStyle='#f43f5e'; ctx.setLineDash([4,4]); ctx.beginPath();
+    ctx.moveTo(rx,padT); ctx.lineTo(rx,H-padB); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#f43f5e'; ctx.fillText('RE '+ageStr(r.retMonths,p.age),rx+4,padT+10);
+    // FIRE number line at retirement (deflate if real view)
+    var expAtRet=(mode==='exp'?r.exp:p.expenses*(mode==='sip'?1:1))*Math.pow(1+p.infl,r.retMonths/12);
+    var fn=p.mult*expAtRet*12; if(chartReal)fn=fn/Math.pow(1+p.infl,r.retMonths/12);
+    ctx.strokeStyle='#f59e0b'; ctx.setLineDash([2,3]); ctx.beginPath();
+    ctx.moveTo(padL,Y(fn)); ctx.lineTo(W-padR,Y(fn)); ctx.stroke(); ctx.setLineDash([]);
+  }
+  if(sim.depleted!=null){
+    ctx.fillStyle='#991b1b'; ctx.fillText('₹0 at '+ageStr(sim.depleted,p.age),X(sim.depleted)-30,Y(0)-6);
+  }
+}
+/* ---------- wiring ---------- */
+['age','lifeExp','corpus','income','expenses','sip','stepup','retPre','retPost','infl','crashPct'].forEach(function(id){sync(id,calc);});
+sync('retAge',calc);
+$('swr').addEventListener('change',calc);
+['stRet','stInf','stCrash'].forEach(function(id){$(id).addEventListener('change',calc);});
+$('modeAge').addEventListener('click',function(){setMode('age');});
+$('modeSip').addEventListener('click',function(){setMode('sip');});
+$('modeExp').addEventListener('click',function(){setMode('exp');});
+document.querySelectorAll('.scen button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.scen button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var v={base:[12,9,6],opt:[14,10.5,5],cons:[10,8,7],stag:[8,7,8]}[b.getAttribute('data-scen')];
+    $('retPre').value=v[0];$('retPost').value=v[1];$('infl').value=v[2];calc();
+  });
+});
+$('togNom').addEventListener('click',function(){chartReal=false;$('togNom').classList.add('on');$('togReal').classList.remove('on');calc();});
+$('togReal').addEventListener('click',function(){chartReal=true;$('togReal').classList.add('on');$('togNom').classList.remove('on');calc();});
+window.addEventListener('resize',function(){calc();});
+setMode('age');
+</script>
+</body>
+</html>

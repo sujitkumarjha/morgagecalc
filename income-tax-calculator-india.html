@@ -124,6 +124,14 @@ window.addEventListener('load',function(){var f=function(){var s=document.create
     googletag.defineSlot('/22131363442//22131363442/Fincalc/Fincalc_MR_1', [[300,250]], 'div-gpt-ad-6289870-5')
              .addService(googletag.pubads());
     googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs(true);
+    googletag.pubads().addEventListener('slotRenderEnded', function(e){
+      if(e.isEmpty){
+        var d=document.getElementById(e.slot.getSlotElementId());
+        var w=d&&(d.closest('.ad-slot')||d.closest('.ad-rail'));
+        if(w)w.style.display='none';
+      }
+    });
     googletag.enableServices();
   });
 </script>
